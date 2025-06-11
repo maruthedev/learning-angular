@@ -1,3 +1,4 @@
+import { CommonModule } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Member } from '../../model/member.model';
@@ -8,11 +9,15 @@ import { retypePasswordValidator } from '../../directive/retype-password-validat
 
 @Component({
   selector: 'app-register-form',
-  imports: [ReactiveFormsModule],
+  imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './register-form.component.html',
   styleUrl: './register-form.component.css'
 })
 export class RegisterFormComponent {
+  minAge: number = 1;
+  maxAge: number = 999;
+  telRegex: RegExp = new RegExp('^0[1-9]{3}[0-9]{6}$');
+  emailRegex: RegExp = new RegExp('^[a-zA-Z0-9]+@[a-z]+\.[a-z]+$');
   registMember: Member = new Member(
     "", "", "", 0, "", "", ""
   );
@@ -30,20 +35,20 @@ export class RegisterFormComponent {
       this.registMember.age,
       [
         Validators.required,
-        ageValidator(1, 999)
+        ageValidator(this.minAge, this.maxAge)
       ]
     ],
     tel: [
       this.registMember.tel,
       [
-        telValidator(new RegExp('^0[1-9]{3}[0-9]{6}$'))
+        telValidator(this.telRegex)
       ]
     ],
     email: [
       this.registMember.email,
       [
         Validators.required,
-        emailValidator(new RegExp('^[a-zA-Z0-9]+@[a-z]+\.[a-z]+$'))
+        emailValidator(this.emailRegex)
       ]
     ],
     password: [
@@ -55,18 +60,15 @@ export class RegisterFormComponent {
     retypePassword: [
       '',
       [
-        Validators.required,
-        retypePasswordValidator(this.registMember.password)
+        Validators.required
       ]
     ]
+  },
+  {
+    validators: retypePasswordValidator()
   })
 
   onSubmit(): void {
-    console.log(this.memberForm.get('name')?.value);
-    console.log(this.memberForm.get('gender')?.value);
-    console.log(this.memberForm.get('age')?.value);
-    console.log(this.memberForm.get('tel')?.value);
-    console.log(this.memberForm.get('email')?.value);
-    console.log(this.memberForm.get('password')?.value);
+    confirm(`new member: ${this.memberForm.get('name')?.value}`);
   }
 }

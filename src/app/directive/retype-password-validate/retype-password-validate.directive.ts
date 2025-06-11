@@ -8,12 +8,11 @@ export class RetypePasswordValidateDirective {
   constructor() { }
 }
 
-export function retypePasswordValidator(password: string): ValidatorFn{
+export function retypePasswordValidator(): ValidatorFn{
   return (control: AbstractControl): ValidationErrors | null =>{
-    console.log(password);
-    console.log(control.value);
-    console.log(password == control.value);
-    let pass = (password == control.value.toString());
-    return pass ? null : {"invalid": true};
+    let password = control.get('password')?.value;
+    let retypePassword = control.get('retypePassword')?.value;
+    let pass = (password == retypePassword);
+    return pass ? null : {passwordMismatch: true};
   }
 }

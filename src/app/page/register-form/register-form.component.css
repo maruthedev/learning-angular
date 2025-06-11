@@ -1,1 +1,23 @@
 @import url('https://unpkg.com/bootstrap@3.3.7/dist/css/bootstrap.min.css');
+
+#title{
+    text-align: center;
+    margin-top: 80px;
+}
+
+form{
+    width: 300px;
+    margin: auto;
+
+    label{
+        margin-right: 10px;
+    }
+
+    button{
+        width: 100%;
+    }
+}
+
+.warn-message{
+    color: red;
+}

@@ -11,6 +11,6 @@ export class TelValidateDirective {
 export function telValidator(regex: RegExp): ValidatorFn{
   return (control: AbstractControl): ValidationErrors | null => {
     let pass = regex.test(control.value);
-    return pass ? null : {"invalid": true};
+    return pass ? null : {invalidTel: true};
   } 
 }

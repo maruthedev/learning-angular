@@ -11,6 +11,6 @@ export class AgeValidateDirective {
 export function ageValidator(min: number, max: number): ValidatorFn{
   return (control: AbstractControl): ValidationErrors | null => {
     let pass = control.value >= min && control.value <= max;
-    return pass ? null : {"invalid": true};
+    return pass ? null : {outRangeAge: true};
   }
 }
