@@ -1,5 +1,5 @@
 import { Directive } from '@angular/core';
-import { AbstractControl, NG_VALIDATORS, ValidationErrors, Validator } from '@angular/forms';
+import { AbstractControl, NG_VALIDATORS, ValidationErrors, Validator, ValidatorFn } from '@angular/forms';
 
 @Directive({
   selector: '[appEmailValidate]',
@@ -17,7 +17,13 @@ export class EmailValidateDirective implements Validator{
   constructor() { }
 
   validate(control: AbstractControl): ValidationErrors | null {
-    let pass = this.emailRegex.test(control.value);
+    return emailValidator(this.emailRegex)(control);
+  }
+}
+
+export function emailValidator(regex: RegExp): ValidatorFn{
+  return (control: AbstractControl): ValidationErrors | null =>{
+    let pass = regex.test(control.value);
     return pass ? null : {"invalid": true};
   }
 }
