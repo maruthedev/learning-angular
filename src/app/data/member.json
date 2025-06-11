@@ -1,0 +1,38 @@
+[
+    {
+        "email": "admin@domain.com",
+        "member": {
+            "id": "1",
+            "name": "admin001",
+            "gender": "male",
+            "age": 25,
+            "tel": "123456",
+            "email": "admin@domain.com",
+            "password": "admin"
+        }
+    },
+    {
+        "email": "staff@domain.com",
+        "member": {
+            "id": "2",
+            "name": "staff003",
+            "gender": "female",
+            "age": 20,
+            "tel": null,
+            "email": "staff@domain.com",
+            "password": "staff"
+        }
+    },
+    {
+        "email": "sale@domain.com",
+        "member": {
+            "id": "3",
+            "name": "sale002",
+            "gender": null,
+            "age": 25,
+            "tel": "123123",
+            "email": "sale@domain.com",
+            "password": "sale"
+        }
+    }
+]

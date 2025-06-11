@@ -1,0 +1,35 @@
+<h1 id="title">LOGIN</h1>
+<form #userForm="ngForm"
+    (ngSubmit)="onSubmit()">
+    <div>
+        <label for="email">Email</label>
+        <label class="warn-message"
+            [hidden]="!email.invalid">invalid email</label>
+        <input class="form-control"
+            type="email"
+            id="email"
+            name="email"
+            placeholder="email@domain.com"
+            [(ngModel)]="loginUser.email"
+            #email="ngModel"
+            maxlength="20"
+            appEmailValidate
+            required />
+    </div>
+    <div>
+        <label for="password">Password</label>
+        <label class="warn-message"
+            [hidden]="!password.invalid">empty password</label>
+        <input class="form-control"
+            type="password"
+            id="password"
+            name="password"
+            placeholder="password"
+            [(ngModel)]="loginUser.password"
+            #password="ngModel"
+            required />
+    </div>
+    <button class="btn btn-primary"
+        type="submit"
+        [disabled]="!userForm.form.valid">Login</button>
+</form>
