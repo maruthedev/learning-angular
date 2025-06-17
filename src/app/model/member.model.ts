@@ -14,7 +14,7 @@ export class Member extends User {
         age: number,
         tel: string | undefined,
         email: string,
-        password: string
+        password: string | null
     ) {
         super(email, password);
         this.id = id;

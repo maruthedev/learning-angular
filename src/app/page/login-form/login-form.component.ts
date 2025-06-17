@@ -2,9 +2,10 @@ import { CommonModule } from '@angular/common';
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { User} from '../../model/user.model';
-import { Member} from '../../model/member.model';
 import { EmailValidateDirective } from '../../directive/email-validate/email-validate.directive';
 import { MemberService } from '../../service/member-service/member.service';
+import { Member } from '../../model/member.model';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login-form',
@@ -13,24 +14,20 @@ import { MemberService } from '../../service/member-service/member.service';
   styleUrl: './login-form.component.css'
 })
 export class LoginFormComponent implements OnInit{
-  memberService: MemberService = inject(MemberService);
-  existedMember: Map<string, Member> = new Map<string, Member>();
+  private memberService: MemberService = inject(MemberService);
+  private router: Router = inject(Router);
   loginUser: User = new User("", "");
+  loggedMember: Member | undefined = undefined;
 
   ngOnInit(): void {
-    this.existedMember = this.memberService.getExistedMember();
+    
   }
 
-  onSubmit(): void {
-    if(!this.existedMember.has(this.loginUser.email)){
-      alert("login failed")
-      return;
-    }
-    let member: Member | undefined = this.existedMember.get(this.loginUser.email);
-    if(!member || member.password != this.loginUser.password){
-      alert("login failed")
-      return;
-    }
-    confirm(`logged in as ${member.name}`)
+  async onSubmit(): Promise<void> {
+    this.loggedMember = await this.memberService.login(this.loginUser);
+    if(this.loggedMember){
+      localStorage.setItem("accessToken", this.loggedMember.id);
+      this.router.navigate(["/home"]);
+    }  
   }
 }

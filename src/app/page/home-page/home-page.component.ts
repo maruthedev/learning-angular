@@ -1,12 +1,16 @@
-import { Component } from '@angular/core';
-import { RouterLink } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { Component, inject, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-home-page',
-  imports: [RouterLink],
+  imports: [CommonModule],
   templateUrl: './home-page.component.html',
   styleUrl: './home-page.component.css'
 })
-export class HomePageComponent {
+export class HomePageComponent implements OnInit{
+  accessToken: string | null = null;
 
+  ngOnInit(): void {
+    this.accessToken = localStorage.getItem('accessToken');
+  }
 }

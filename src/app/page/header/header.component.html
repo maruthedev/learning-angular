@@ -1,0 +1,21 @@
+<nav>
+    <ul class="header">
+        <div class="item-home">
+            <li>
+                <label><a routerLink="/home">HOME PAGE</a></label>
+            </li>
+        </div>
+
+        <div class="item-others">
+            <li *ngIf="!accessToken">
+                <label><a routerLink="/login">LOGIN</a></label>
+            </li>
+            <li *ngIf="accessToken">
+                <label><a (click)="logout()">LOGOUT</a></label>
+            </li>
+            <li>
+                <label><a routerLink="/register">REGISTER</a></label>
+            </li>
+        </div>
+    </ul>
+</nav>

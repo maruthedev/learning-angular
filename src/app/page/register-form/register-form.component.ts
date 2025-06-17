@@ -6,6 +6,8 @@ import { emailValidator } from '../../directive/email-validate/email-validate.di
 import { telValidator } from '../../directive/tel-validate/tel-validate.directive';
 import { ageValidator } from '../../directive/age-validate/age-validate.directive';
 import { retypePasswordValidator } from '../../directive/retype-password-validate/retype-password-validate.directive';
+import { MemberService } from '../../service/member-service/member.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-register-form',
@@ -14,6 +16,9 @@ import { retypePasswordValidator } from '../../directive/retype-password-validat
   styleUrl: './register-form.component.css'
 })
 export class RegisterFormComponent {
+  private memberService: MemberService = inject(MemberService);
+  private router: Router = inject(Router);
+  loggedMember: Member | undefined = undefined;
   minAge: number = 1;
   maxAge: number = 999;
   telRegex: RegExp = new RegExp('^0[1-9]{3}[0-9]{6}$');
@@ -68,7 +73,11 @@ export class RegisterFormComponent {
     validators: retypePasswordValidator()
   })
 
-  onSubmit(): void {
-    confirm(`new member: ${this.memberForm.get('name')?.value}`);
+  async onSubmit(): Promise<void> {
+    this.loggedMember = await this.memberService.register(this.memberForm.value);
+    if(this.loggedMember){
+      localStorage.setItem("accessToken", this.loggedMember.id);
+      this.router.navigate(["/home"]);
+    } 
   }
 }

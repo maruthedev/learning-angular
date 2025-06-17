@@ -4,7 +4,7 @@
     <div>
         <label for="email">Email</label>
         <label class="warn-message"
-            [hidden]="!email.invalid">invalid email</label>
+            *ngIf="email.invalid && email.touched">invalid email</label>
         <input class="form-control"
             type="email"
             id="email"
@@ -19,7 +19,7 @@
     <div>
         <label for="password">Password</label>
         <label class="warn-message"
-            [hidden]="!password.invalid">empty password</label>
+            *ngIf="password.invalid && password.touched">empty password</label>
         <input class="form-control"
             type="password"
             id="password"
@@ -33,3 +33,5 @@
         type="submit"
         [disabled]="!userForm.form.valid">Login</button>
 </form>
+
+<div *ngIf="loggedMember" style="text-align: center;">{{loggedMember | json}}</div>
