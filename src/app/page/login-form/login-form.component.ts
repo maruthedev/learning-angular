@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject, OnInit } from '@angular/core';
+import { Component} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { User} from '../../model/user.model';
 import { EmailValidateDirective } from '../../directive/email-validate/email-validate.directive';
@@ -13,15 +13,14 @@ import { Router } from '@angular/router';
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.css'
 })
-export class LoginFormComponent implements OnInit{
-  private memberService: MemberService = inject(MemberService);
-  private router: Router = inject(Router);
+export class LoginFormComponent{
   loginUser: User = new User("", "");
   loggedMember: Member | undefined = undefined;
 
-  ngOnInit(): void {
-    
-  }
+  constructor(
+    private memberService: MemberService,
+    private router: Router
+  ){}
 
   async onSubmit(): Promise<void> {
     this.loggedMember = await this.memberService.login(this.loginUser);

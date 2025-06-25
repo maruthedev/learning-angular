@@ -1,4 +1,4 @@
-import { AfterContentChecked, Component, inject, OnChanges, OnInit } from '@angular/core';
+import { AfterContentChecked, Component, OnChanges, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
 
@@ -9,8 +9,10 @@ import { CommonModule } from '@angular/common';
   styleUrl: './header.component.css'
 })
 export class HeaderComponent implements AfterContentChecked{
-  private router: Router = inject(Router);
   accessToken: string | null = null;
+  constructor(
+    private router: Router
+  ){}
 
   ngAfterContentChecked(): void {
     this.accessToken = localStorage.getItem("accessToken");

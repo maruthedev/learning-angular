@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Member } from '../../model/member.model';
 import { emailValidator } from '../../directive/email-validate/email-validate.directive';
@@ -15,9 +15,7 @@ import { Router } from '@angular/router';
   templateUrl: './register-form.component.html',
   styleUrl: './register-form.component.css'
 })
-export class RegisterFormComponent {
-  private memberService: MemberService = inject(MemberService);
-  private router: Router = inject(Router);
+export class RegisterFormComponent implements OnInit {
   loggedMember: Member | undefined = undefined;
   minAge: number = 1;
   maxAge: number = 999;
@@ -26,58 +24,68 @@ export class RegisterFormComponent {
   registMember: Member = new Member(
     "", "", "", 0, "", "", ""
   );
-  formBuilder: FormBuilder = inject(FormBuilder);
-  memberForm: FormGroup = this.formBuilder.group({
-    name: [
-      this.registMember.name,
-      [
-        Validators.required,
-        Validators.maxLength(20)
+  memberForm!: FormGroup;
+  
+  constructor(
+    private memberService: MemberService,
+    private router: Router,
+    private formBuilder: FormBuilder
+  ) {}
+  
+  ngOnInit(): void {
+    this.memberForm = this.formBuilder.group({
+      name: [
+        this.registMember.name,
+        [
+          Validators.required,
+          Validators.maxLength(20)
+        ]
+      ],
+      gender: this.registMember.gender,
+      age: [
+        this.registMember.age,
+        [
+          Validators.required,
+          ageValidator(this.minAge, this.maxAge)
+        ]
+      ],
+      tel: [
+        this.registMember.tel,
+        [
+          telValidator(this.telRegex)
+        ]
+      ],
+      email: [
+        this.registMember.email,
+        [
+          Validators.required,
+          emailValidator(this.emailRegex)
+        ]
+      ],
+      password: [
+        this.registMember.password,
+        [
+          Validators.required
+        ]
+      ],
+      retypePassword: [
+        '',
+        [
+          Validators.required
+        ]
       ]
-    ],
-    gender: this.registMember.gender,
-    age: [
-      this.registMember.age,
-      [
-        Validators.required,
-        ageValidator(this.minAge, this.maxAge)
-      ]
-    ],
-    tel: [
-      this.registMember.tel,
-      [
-        telValidator(this.telRegex)
-      ]
-    ],
-    email: [
-      this.registMember.email,
-      [
-        Validators.required,
-        emailValidator(this.emailRegex)
-      ]
-    ],
-    password: [
-      this.registMember.password,
-      [
-        Validators.required
-      ]
-    ],
-    retypePassword: [
-      '',
-      [
-        Validators.required
-      ]
-    ]
-  },
-  {
-    validators: retypePasswordValidator()
-  })
+    },
+      {
+        validators: retypePasswordValidator()
+      })
+  }
+
 
   async onSubmit(): Promise<void> {
     this.loggedMember = await this.memberService.register(this.memberForm.value);
-    if(this.loggedMember){
+    if (this.loggedMember) {
       localStorage.setItem("accessToken", this.loggedMember.id);
       this.router.navigate(["/home"]);
-    } 
+    }
   }
 }

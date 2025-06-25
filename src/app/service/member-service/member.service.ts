@@ -1,18 +1,19 @@
-import { inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Member } from '../../model/member.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from '../../model/user.model';
 import { APIURL } from '../../environment/api.environment';
-import { firstValueFrom, retry } from 'rxjs';
+import { firstValueFrom} from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MemberService {
   private loggedMember: Member | undefined = undefined;
-  private http: HttpClient = inject(HttpClient);
 
-  constructor() { }
+  constructor(
+    private http: HttpClient
+  ) { }
 
   async helloWorld(): Promise<void> {
     this.http.get<any>(`${APIURL.localBaseURL}/hello`)
