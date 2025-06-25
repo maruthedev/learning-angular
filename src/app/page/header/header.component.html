@@ -7,13 +7,16 @@
         </div>
 
         <div class="item-others">
+            <li *ngIf="accessToken && memberRole !== 'CLIENT'">
+                <label><a routerLink="/member/management">MEMBER MANAGEMENT</a></label>
+            </li>
             <li *ngIf="!accessToken">
                 <label><a routerLink="/login">LOGIN</a></label>
             </li>
             <li *ngIf="accessToken">
-                <label><a (click)="logout()">LOGOUT</a></label>
+                <label><a routerLink (click)="logout()">LOGOUT</a></label>
             </li>
-            <li>
+            <li *ngIf="!accessToken">
                 <label><a routerLink="/register">REGISTER</a></label>
             </li>
         </div>

@@ -51,6 +51,17 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "remote": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "fileReplacements": [
+                {
+                  "replace": "src/environment/api.environment.ts",
+                  "with": "src/environment/api.environment.remote.ts"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
@@ -63,6 +74,9 @@
             },
             "development": {
               "buildTarget": "learning-angular:build:development"
+            },
+            "remote": {
+              "buildTarget": "learning-angular:build:remote"
             }
           },
           "defaultConfiguration": "development"

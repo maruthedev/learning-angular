@@ -6,6 +6,7 @@ export class Member extends User {
     public gender?: string;
     public age: number;
     public tel?: string;
+    public role: string;
 
     constructor(
         id: string,
@@ -13,6 +14,7 @@ export class Member extends User {
         gender: string | undefined,
         age: number,
         tel: string | undefined,
+        role: string,
         email: string,
         password: string | null
     ) {
@@ -22,6 +24,7 @@ export class Member extends User {
         this.gender = gender;
         this.age = age;
         this.tel = tel;
+        this.role = role;
         this.email = email;
         this.password = password;
     }

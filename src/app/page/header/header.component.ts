@@ -1,6 +1,8 @@
 import { AfterContentChecked, Component, OnChanges, OnInit } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
+import { MemberService } from '../../service/member-service/member.service';
+import { AuthService } from '../../service/auth-service/auth.service';
 
 @Component({
   selector: 'app-header',
@@ -10,16 +12,19 @@ import { CommonModule } from '@angular/common';
 })
 export class HeaderComponent implements AfterContentChecked{
   accessToken: string | null = null;
+  memberRole: string | null = '';
   constructor(
-    private router: Router
+    private router: Router,
+    private memberService: MemberService,
+    private authService: AuthService
   ){}
 
   ngAfterContentChecked(): void {
-    this.accessToken = localStorage.getItem("accessToken");
+    this.accessToken = this.authService.getAccessToken();
+    this.memberRole = this.authService.getMemberRole();
   }
 
   logout(){
-    localStorage.removeItem("accessToken");
-    this.router.navigate(["/login"]);
+    this.memberService.logout(this.router);
   }
 }

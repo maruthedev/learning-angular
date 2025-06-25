@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
+import { AuthService } from '../../service/auth-service/auth.service';
 
 @Component({
   selector: 'app-home-page',
@@ -10,7 +11,11 @@ import { Component, OnInit } from '@angular/core';
 export class HomePageComponent implements OnInit{
   accessToken: string | null = null;
 
+  constructor(
+    private authService: AuthService
+  ){}
+
   ngOnInit(): void {
-    this.accessToken = localStorage.getItem('accessToken');
+    this.accessToken = this.authService.getAccessToken();
   }
 }

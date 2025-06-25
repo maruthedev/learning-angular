@@ -12,7 +12,7 @@ import { AbstractControl, NG_VALIDATORS, ValidationErrors, Validator, ValidatorF
   ]
 })
 export class EmailValidateDirective implements Validator{
-  emailRegex: RegExp = new RegExp('^[a-zA-Z0-9]+@[a-z]+\.[a-z]+$');
+  emailRegex: RegExp = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
 
   constructor() { }
 

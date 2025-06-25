@@ -20,18 +20,18 @@ export class RegisterFormComponent implements OnInit {
   minAge: number = 1;
   maxAge: number = 999;
   telRegex: RegExp = new RegExp('^0[1-9]{3}[0-9]{6}$');
-  emailRegex: RegExp = new RegExp('^[a-zA-Z0-9]+@[a-z]+\.[a-z]+$');
+  emailRegex: RegExp = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
   registMember: Member = new Member(
-    "", "", "", 0, "", "", ""
+    "", "", "", 0, "", "", "", ""
   );
   memberForm!: FormGroup;
-  
+
   constructor(
     private memberService: MemberService,
     private router: Router,
     private formBuilder: FormBuilder
-  ) {}
-  
+  ) { }
+
   ngOnInit(): void {
     this.memberForm = this.formBuilder.group({
       name: [
@@ -84,8 +84,8 @@ export class RegisterFormComponent implements OnInit {
   async onSubmit(): Promise<void> {
     this.loggedMember = await this.memberService.register(this.memberForm.value);
     if (this.loggedMember) {
-      localStorage.setItem("accessToken", this.loggedMember.id);
-      this.router.navigate(["/home"]);
+      confirm("REGISTER SUCCESS");
+      this.router.navigate(["/login"]);
     }
   }
 }
