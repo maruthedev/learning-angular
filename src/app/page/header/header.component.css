@@ -18,3 +18,7 @@ li {
         text-decoration: none;
     }
 }
+
+a.active{
+    color: RED;
+}

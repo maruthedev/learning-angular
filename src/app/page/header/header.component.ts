@@ -1,12 +1,12 @@
-import { AfterContentChecked, Component, OnChanges, OnInit } from '@angular/core';
-import { Router, RouterLink } from '@angular/router';
+import { AfterContentChecked, Component } from '@angular/core';
+import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MemberService } from '../../service/member-service/member.service';
 import { AuthService } from '../../service/auth-service/auth.service';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, CommonModule],
+  imports: [RouterLink, CommonModule, RouterLinkActive],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })

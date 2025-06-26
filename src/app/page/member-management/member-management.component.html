@@ -5,7 +5,7 @@
         <th>age</th>
         <th>tel</th>
         <th>email</th>
-        <th>role</th>
+        <th *ngIf="memberRole === 'ADMIN'">role</th>
         <th *ngIf="memberRole === 'ADMIN'">operation</th>
     </thead>
     <tbody>
@@ -15,7 +15,7 @@
             <td>{{ member.age }}</td>
             <td>{{ member.tel }}</td>
             <td>{{ member.email }}</td>
-            <td>{{ member.role }}</td>
+            <td *ngIf="memberRole === 'ADMIN'">{{ member.role }}</td>
             <td *ngIf="memberRole === 'ADMIN'">
                 <button class="btn btn-primary" (click)="edit(member.id)">EDIT</button>
                 <button *ngIf="member.role !== 'ADMIN'" class="btn btn-danger" (click)="delete(member)">DELETE</button>

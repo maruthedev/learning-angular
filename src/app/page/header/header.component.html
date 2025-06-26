@@ -1,24 +1,22 @@
 <nav>
     <ul class="header">
-        <div class="item-home">
-            <li>
-                <label><a routerLink="/home">HOME PAGE</a></label>
-            </li>
-        </div>
+        <li class="item-home">
+            <label><a routerLink="/home" routerLinkActive="active">HOME PAGE</a></label>
+        </li>
 
-        <div class="item-others">
+        <span class="item-others">
             <li *ngIf="accessToken && memberRole !== 'CLIENT'">
-                <label><a routerLink="/member/management">MEMBER MANAGEMENT</a></label>
+                <label><a routerLink="/member/management" routerLinkActive="active">MEMBER MANAGEMENT</a></label>
             </li>
             <li *ngIf="!accessToken">
-                <label><a routerLink="/login">LOGIN</a></label>
+                <label><a routerLink="/login" routerLinkActive="active">LOGIN</a></label>
             </li>
             <li *ngIf="accessToken">
                 <label><a routerLink (click)="logout()">LOGOUT</a></label>
             </li>
             <li *ngIf="!accessToken">
-                <label><a routerLink="/register">REGISTER</a></label>
+                <label><a routerLink="/register" routerLinkActive="active">REGISTER</a></label>
             </li>
-        </div>
+        </span>
     </ul>
 </nav>
