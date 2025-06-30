@@ -1,11 +1,7 @@
-#title{
-    text-align: center;
-    margin-top: 80px;
-}
-
-form{
+.member-form{
     width: 300px;
     margin: auto;
+    margin-left: 50%;
 
     label{
         margin-right: 10px;
@@ -14,6 +10,10 @@ form{
     button{
         width: 100%;
     }
+}
+
+.choose-one-title{
+    margin: auto;
 }
 
 .warn-message{

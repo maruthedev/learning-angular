@@ -5,7 +5,6 @@ import { HomePageComponent } from './page/home-page/home-page.component';
 import { NotFoundPageComponent } from './page/not-found-page/not-found-page.component';
 import { authGuard, blockClientRoleGuard } from './common/guard/auth.guard';
 import { MemberManagementComponent } from './page/member-management/member-management.component';
-import { MemberDetailComponent } from './page/member-management/member-detail/member-detail.component';
 import { ProductManagementComponent } from './page/product-management/product-management.component';
 import { ProductDetailComponent } from './page/product-management/product-detail/product-detail.component';
 
@@ -34,10 +33,6 @@ export const routes: Routes = [
             {
                 path: "management",
                 component: MemberManagementComponent
-            },
-            {
-                path: "detail/:memberId",
-                component: MemberDetailComponent
             }
         ],
         canActivate: [authGuard, blockClientRoleGuard]

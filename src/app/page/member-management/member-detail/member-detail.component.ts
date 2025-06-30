@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, input, InputSignal, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { Member } from '../../../common/model/member.model';
 import { ageValidator } from '../../../common/directive/age-validate/age-validate.directive';
 import { telValidator } from '../../../common/directive/tel-validate/tel-validate.directive';
@@ -15,23 +15,41 @@ import { MemberManagementService } from '../member-management.service';
   templateUrl: './member-detail.component.html',
   styleUrl: './member-detail.component.css'
 })
-export class MemberDetailComponent {
+export class MemberDetailComponent implements OnChanges{
   member!: Member;
+  memberForm!: FormGroup;
+  inputMemberId: InputSignal<string | undefined> = input();
   minAge: number = 1;
   maxAge: number = 999;
   telRegex: RegExp = new RegExp('^0[1-9]{3}[0-9]{6}$');
   emailRegex: RegExp = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
-  memberForm!: FormGroup;
 
   constructor(
     private formBuilder: FormBuilder,
     private memberManagementService: MemberManagementService,
-    private route: ActivatedRoute,
     private router: Router
   ) { }
 
-  async ngOnInit(): Promise<void> {
+  async ngOnChanges(changes: SimpleChanges): Promise<void> {
     await this.getMemberDetail();
+    this.createFormGroup();
+  }
+
+  async getMemberDetail() {
+    let id = this.inputMemberId();
+    if (!id) return;
+    this.member = await this.memberManagementService.getMemberDetail(id);
+    this.updateFormGroup();
+  }
+
+  createFormGroup(): void{
+    if(!this.member){
+      return;
+    }
+    if(this.memberForm){
+      this.updateFormGroup();
+      return;
+    }
     this.memberForm = this.formBuilder.group({
       id: [
         this.member.id
@@ -70,11 +88,17 @@ export class MemberDetailComponent {
     })
   }
 
-  async getMemberDetail() {
-    let memberId = this.route.snapshot.paramMap.get('memberId');
-    if (!memberId) return;
-    this.member = await this.memberManagementService.getMemberDetail(memberId);
-    console.log(this.member);
+  updateFormGroup(): void{
+    if(!this.memberForm){
+      return;
+    }
+    this.memberForm.get("id")?.setValue(this.member.id);
+    this.memberForm.get("name")?.setValue(this.member.name);
+    this.memberForm.get("gender")?.setValue(this.member.gender);
+    this.memberForm.get("age")?.setValue(this.member.age);
+    this.memberForm.get("tel")?.setValue(this.member.tel);
+    this.memberForm.get("email")?.setValue(this.member.email);
+    this.memberForm.get("role")?.setValue(this.member.role);
   }
 
   async onSubmit(): Promise<void> {

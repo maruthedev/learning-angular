@@ -1,37 +1,30 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Member } from '../../common/model/member.model';
-import { Router } from '@angular/router';
 import { MemberManagementService } from './member-management.service';
 import { AuthService } from '../../common/service/auth.service';
+import { MemberDetailComponent } from "./member-detail/member-detail.component";
 
 @Component({
   selector: 'app-member-management',
-  imports: [CommonModule],
+  imports: [CommonModule, MemberDetailComponent],
   templateUrl: './member-management.component.html',
   styleUrl: './member-management.component.css'
 })
 export class MemberManagementComponent implements OnInit{
-  memberRole!: string | null;
-  memberRoleDef: Map<string, string> = new Map<string, string>(
-    [
-      ['ADMIN','ADMIN'],
-      ['USER','USER'],
-      ['CLIENT','CLIENT']
-    ]
-  )
+  loggedMemberRole!: string | null;
   allMembers: Array<Member> = [];
+  editingMember: Member | undefined;
 
   constructor(
     private authService: AuthService,
-    private memberManagementService: MemberManagementService,
-    private router: Router
+    private memberManagementService: MemberManagementService
   ){
     
   }
 
   async ngOnInit(): Promise<void>{
-    this.memberRole = this.authService.getMemberRole();
+    this.loggedMemberRole = this.authService.getMemberRole();
     this.loadData();
   }
 
@@ -39,8 +32,8 @@ export class MemberManagementComponent implements OnInit{
     this.allMembers = await this.memberManagementService.getAllMembers();
   }
 
-  edit(memberId: string){
-    this.router.navigate(['/member/detail', memberId]);
+  async edit(memberId: string): Promise<void>{
+    this.editingMember = await this.memberManagementService.getMemberDetail(memberId);
   }
 
   delete(member: Member){
@@ -48,7 +41,6 @@ export class MemberManagementComponent implements OnInit{
     if(decision){
       try{
         this.memberManagementService.deleteMember(member);
-        confirm("Delete successfully");
         this.loadData();
       } catch(exception){
         alert("Delete failed");

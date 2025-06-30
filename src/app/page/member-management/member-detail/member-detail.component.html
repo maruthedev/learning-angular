@@ -1,6 +1,5 @@
-<h1 id="title">UPDATE</h1>
-<form *ngIf="memberForm" [formGroup]="memberForm"
-    (ngSubmit)="onSubmit()">
+<form *ngIf="memberForm && inputMemberId" [formGroup]="memberForm"
+    (ngSubmit)="onSubmit()" class="member-form">
     <div>
         <input id="id"
             formControlName="id"
@@ -60,3 +59,6 @@
         type="submit"
         [disabled]="memberForm.invalid">Update</button>
 </form>
+<div *ngIf="!memberForm || !inputMemberId" class="choose-one-title">
+    <h1>Chon mot member de sua hoac xoa</h1>
+</div>
