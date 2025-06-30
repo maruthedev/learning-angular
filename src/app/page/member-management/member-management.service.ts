@@ -1,8 +1,8 @@
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { APIURL } from '../../../environment/api.environment';
+import { APIURL } from '../../../environments/api.environment';
 import { firstValueFrom } from 'rxjs';
-import { Member } from '../../model/member.model';
+import { Member } from '../../common/model/member.model';
 
 @Injectable({
   providedIn: 'root'

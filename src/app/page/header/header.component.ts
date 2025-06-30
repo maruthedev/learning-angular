@@ -1,8 +1,8 @@
 import { AfterContentChecked, Component } from '@angular/core';
 import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { MemberService } from '../../service/member-service/member.service';
-import { AuthService } from '../../service/auth-service/auth.service';
+import { MemberService } from '../../common/service/member.service';
+import { AuthService } from '../../common/service/auth.service';
 
 @Component({
   selector: 'app-header',

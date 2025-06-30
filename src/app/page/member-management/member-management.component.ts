@@ -1,9 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import { AuthService } from '../../service/auth-service/auth.service';
 import { CommonModule } from '@angular/common';
-import { MemberManagementService } from '../../service/member-management-service/member-management.service';
-import { Member } from '../../model/member.model';
+import { Member } from '../../common/model/member.model';
 import { Router } from '@angular/router';
+import { MemberManagementService } from './member-management.service';
+import { AuthService } from '../../common/service/auth.service';
 
 @Component({
   selector: 'app-member-management',

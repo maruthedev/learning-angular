@@ -1,13 +1,13 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
-import { Member } from '../../model/member.model';
-import { emailValidator } from '../../directive/email-validate/email-validate.directive';
-import { telValidator } from '../../directive/tel-validate/tel-validate.directive';
-import { ageValidator } from '../../directive/age-validate/age-validate.directive';
-import { retypePasswordValidator } from '../../directive/retype-password-validate/retype-password-validate.directive';
-import { MemberService } from '../../service/member-service/member.service';
+import { Member } from '../../common/model/member.model';
+import { emailValidator } from '../../common/directive/email-validate/email-validate.directive';
+import { telValidator } from '../../common/directive/tel-validate/tel-validate.directive';
+import { ageValidator } from '../../common/directive/age-validate/age-validate.directive';
+import { retypePasswordValidator } from '../../common/directive/retype-password-validate/retype-password-validate.directive';
 import { Router } from '@angular/router';
+import { MemberService } from '../../common/service/member.service';
 
 @Component({
   selector: 'app-register-form',

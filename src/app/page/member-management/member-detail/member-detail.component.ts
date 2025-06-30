@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Member } from '../../model/member.model';
-import { ageValidator } from '../../directive/age-validate/age-validate.directive';
-import { telValidator } from '../../directive/tel-validate/tel-validate.directive';
-import { emailValidator } from '../../directive/email-validate/email-validate.directive';
+import { Member } from '../../../common/model/member.model';
+import { ageValidator } from '../../../common/directive/age-validate/age-validate.directive';
+import { telValidator } from '../../../common/directive/tel-validate/tel-validate.directive';
+import { emailValidator } from '../../../common/directive/email-validate/email-validate.directive';
 import { CommonModule } from '@angular/common';
-import { MemberManagementService } from '../../service/member-management-service/member-management.service';
+import { MemberManagementService } from '../member-management.service';
+
 
 @Component({
   selector: 'app-member-detail',

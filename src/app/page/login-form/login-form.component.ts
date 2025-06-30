@@ -1,12 +1,12 @@
 import { CommonModule } from '@angular/common';
 import { Component} from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { User} from '../../model/user.model';
-import { EmailValidateDirective } from '../../directive/email-validate/email-validate.directive';
-import { MemberService } from '../../service/member-service/member.service';
-import { Member } from '../../model/member.model';
+import { User} from '../../common/model/user.model';
+import { EmailValidateDirective } from '../../common/directive/email-validate/email-validate.directive';
+import { Member } from '../../common/model/member.model';
 import { Router } from '@angular/router';
-import { AuthService } from '../../service/auth-service/auth.service';
+import { MemberService } from '../../common/service/member.service';
+import { AuthService } from '../../common/service/auth.service';
 
 @Component({
   selector: 'app-login-form',

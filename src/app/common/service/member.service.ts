@@ -1,11 +1,11 @@
 import { Injectable } from '@angular/core';
-import { Member } from '../../model/member.model';
+import { Member } from '../model/member.model';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { User } from '../../model/user.model';
-import { APIURL } from '../../../environment/api.environment';
+import { User } from '../model/user.model';
+import { APIURL } from '../../../environments/api.environment';
 import { firstValueFrom} from 'rxjs';
 import { Router } from '@angular/router';
-import { AuthService } from '../auth-service/auth.service';
+import { AuthService } from './auth.service';
 
 @Injectable({
   providedIn: 'root'

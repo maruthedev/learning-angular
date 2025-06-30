@@ -3,9 +3,9 @@ import { LoginFormComponent } from './page/login-form/login-form.component';
 import { RegisterFormComponent } from './page/register-form/register-form.component';
 import { HomePageComponent } from './page/home-page/home-page.component';
 import { NotFoundPageComponent } from './page/not-found-page/not-found-page.component';
-import { authGuard, blockClientRoleGuard } from './guard/auth.guard';
+import { authGuard, blockClientRoleGuard } from './common/guard/auth.guard';
 import { MemberManagementComponent } from './page/member-management/member-management.component';
-import { MemberDetailComponent } from './page/member-detail/member-detail.component';
+import { MemberDetailComponent } from './page/member-management/member-detail/member-detail.component';
 
 export const routes: Routes = [
     {
