@@ -48,6 +48,14 @@
             class="form-control"
             type="tel" />
     </div>
+    <div>
+        <label for="role">Role</label>
+        <select name="role" id="role" class="form-control" formControlName="role">
+            <option value="ADMIN">ADMIN</option>
+            <option value="USER">USER</option>
+            <option value="CLIENT">CLIENT</option>
+        </select>
+    </div>
     <button class="btn btn-primary"
         type="submit"
         [disabled]="memberForm.invalid">Update</button>

@@ -14,7 +14,7 @@ export class MemberManagementService {
   ) { }
 
   async getAllMembers(): Promise<Array<Member>> {
-    let response = await firstValueFrom(this.http.get<any>(`${APIURL.baseURL}:${APIURL.port}/member/getAllMembers`));
+    let response = await firstValueFrom(this.http.get<any>(`${APIURL.baseURL}:${APIURL.port}/member/all`));
     try {
       return response;
     } catch (exception) {

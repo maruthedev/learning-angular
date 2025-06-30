@@ -63,6 +63,9 @@ export class MemberDetailComponent {
           Validators.required,
           emailValidator(this.emailRegex)
         ]
+      ],
+      role: [
+        this.member.role
       ]
     })
   }

@@ -6,6 +6,8 @@ import { NotFoundPageComponent } from './page/not-found-page/not-found-page.comp
 import { authGuard, blockClientRoleGuard } from './common/guard/auth.guard';
 import { MemberManagementComponent } from './page/member-management/member-management.component';
 import { MemberDetailComponent } from './page/member-management/member-detail/member-detail.component';
+import { ProductManagementComponent } from './page/product-management/product-management.component';
+import { ProductDetailComponent } from './page/product-management/product-detail/product-detail.component';
 
 export const routes: Routes = [
     {
@@ -39,6 +41,20 @@ export const routes: Routes = [
             }
         ],
         canActivate: [authGuard, blockClientRoleGuard]
+    },
+    {
+        path: "product",
+        children: [
+            {
+                path: "management",
+                component: ProductManagementComponent
+            },
+            {
+                path: "detail/:productId",
+                component: ProductDetailComponent
+            }
+        ],
+        canActivate: [authGuard]
     },
     {
         path: "**",
