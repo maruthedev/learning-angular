@@ -32,20 +32,7 @@ export class MemberManagementComponent implements OnInit{
     this.allMembers = await this.memberManagementService.getAllMembers();
   }
 
-  async edit(memberId: string): Promise<void>{
-    this.editingMember = await this.memberManagementService.getMemberDetail(memberId);
-  }
-
-  delete(member: Member){
-    let decision = confirm(`Delete ${member.email}?`);
-    if(decision){
-      try{
-        this.memberManagementService.deleteMember(member);
-        this.loadData();
-      } catch(exception){
-        alert("Delete failed");
-        console.error(exception);
-      }
-    }
+  async rowSelect(member: Member): Promise<void>{
+    this.editingMember = member;
   }
 }

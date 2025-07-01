@@ -1,21 +1,22 @@
-<table class="table">
-    <thead>
-        <th>id</th>
-        <th>name</th>
-        <th>price</th>
-        <th>image</th>
-        <th *ngIf="memberRole === 'ADMIN' || memberRole === 'USER'">operation</th>
-    </thead>
-    <tbody>
-        <tr *ngFor="let product of allProducts">
-            <td>{{ product.id }}</td>
-            <td>{{ product.name }}</td>
-            <td>{{ product.price | currency }}</td>
-            <td>{{ product.image_url }}</td>
-            <td *ngIf="memberRole === 'ADMIN' || memberRole === 'USER'">
-                <button class="btn btn-primary" (click)="edit(product.id)">EDIT</button>
-                <button class="btn btn-danger" (click)="delete(product)">DELETE</button>
-            </td>
-        </tr>
-    </tbody>
-</table>
+<div class="product-management">
+    <table class="table">
+        <thead>
+            <th>id</th>
+            <th>name</th>
+            <th>price</th>
+            <th>image</th>
+        </thead>
+        <tbody>
+            <tr *ngFor="let product of allProducts" (click)="rowSelect(product)" [ngClass]="product.is_active? '' : 'deleted-item'">
+                <td>{{ product.id }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.price | currency }}</td>
+                <td>{{ product.image_url }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="product-detail">
+        <app-product-detail [inputProduct]="editingProduct" (changeOutput)="loadData()"></app-product-detail>
+    </div>
+</div>

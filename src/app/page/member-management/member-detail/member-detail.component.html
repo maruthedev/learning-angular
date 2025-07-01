@@ -1,5 +1,7 @@
-<form *ngIf="memberForm && inputMemberId" [formGroup]="memberForm"
-    (ngSubmit)="onSubmit()" class="member-form">
+<form *ngIf="memberForm && inputMember"
+    [formGroup]="memberForm"
+    (ngSubmit)="onSubmit()"
+    class="member-form">
     <div>
         <input id="id"
             formControlName="id"
@@ -49,16 +51,31 @@
     </div>
     <div>
         <label for="role">Role</label>
-        <select name="role" id="role" class="form-control" formControlName="role">
+        <select name="role"
+            id="role"
+            class="form-control"
+            formControlName="role">
             <option value="ADMIN">ADMIN</option>
             <option value="USER">USER</option>
             <option value="CLIENT">CLIENT</option>
         </select>
     </div>
     <button class="btn btn-primary"
+        *ngIf="member?.is_active && currentOperatorRole ==='ADMIN'"
         type="submit"
         [disabled]="memberForm.invalid">Update</button>
+    <button class="btn btn-danger"
+        *ngIf="member?.is_active && currentOperatorRole ==='ADMIN'"
+        type="submit"
+        [disabled]="member.role === 'ADMIN'"
+        (click)="delete()">Delete</button>
+    <button class="btn btn-success"
+        *ngIf="!member?.is_active && currentOperatorRole ==='ADMIN'"
+        type="submit"
+        (click)="restore()">Restore</button>
+
 </form>
-<div *ngIf="!memberForm || !inputMemberId" class="choose-one-title">
-    <h1>Chon mot member de sua hoac xoa</h1>
+<div *ngIf="!memberForm || !inputMember"
+    class="choose-one-title">
+    <h1>Chon mot member</h1>
 </div>

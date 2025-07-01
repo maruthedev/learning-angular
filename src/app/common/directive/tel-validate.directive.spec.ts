@@ -1,4 +1,5 @@
-import { TelValidateDirective } from './tel-validate.directive';
+import { TelValidateDirective } from "./tel-validate.directive";
+
 
 describe('TelValidateDirective', () => {
   it('should create an instance', () => {

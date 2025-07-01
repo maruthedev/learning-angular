@@ -1,12 +1,12 @@
-import { Component, input, InputSignal, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, input, InputSignal, OnChanges, output, OutputEmitterRef, SimpleChanges } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
 import { Member } from '../../../common/model/member.model';
-import { ageValidator } from '../../../common/directive/age-validate/age-validate.directive';
-import { telValidator } from '../../../common/directive/tel-validate/tel-validate.directive';
-import { emailValidator } from '../../../common/directive/email-validate/email-validate.directive';
+import { ageValidator } from '../../../common/directive/age-validate.directive';
+import { telValidator } from '../../../common/directive/tel-validate.directive';
 import { CommonModule } from '@angular/common';
 import { MemberManagementService } from '../member-management.service';
+import { AuthService } from '../../../common/service/auth.service';
+import { emailValidator } from '../../../common/directive/email-validate.directive';
 
 
 @Component({
@@ -15,10 +15,12 @@ import { MemberManagementService } from '../member-management.service';
   templateUrl: './member-detail.component.html',
   styleUrl: './member-detail.component.css'
 })
-export class MemberDetailComponent implements OnChanges{
+export class MemberDetailComponent implements OnChanges {
+  currentOperatorRole!: string | null;
   member!: Member;
   memberForm!: FormGroup;
-  inputMemberId: InputSignal<string | undefined> = input();
+  inputMember: InputSignal<Member | undefined> = input();
+  changeOutput: OutputEmitterRef<void> = output();
   minAge: number = 1;
   maxAge: number = 999;
   telRegex: RegExp = new RegExp('^0[1-9]{3}[0-9]{6}$');
@@ -27,26 +29,27 @@ export class MemberDetailComponent implements OnChanges{
   constructor(
     private formBuilder: FormBuilder,
     private memberManagementService: MemberManagementService,
-    private router: Router
-  ) { }
-
-  async ngOnChanges(changes: SimpleChanges): Promise<void> {
-    await this.getMemberDetail();
-    this.createFormGroup();
+    private authService: AuthService
+  ) {
+    this.currentOperatorRole = authService.getMemberRole();
   }
 
-  async getMemberDetail() {
-    let id = this.inputMemberId();
-    if (!id) return;
-    this.member = await this.memberManagementService.getMemberDetail(id);
-    this.updateFormGroup();
+  ngOnChanges(changes: SimpleChanges): void {
+    this.getMemberDetail();
+    this.getFormGroup();
   }
 
-  createFormGroup(): void{
-    if(!this.member){
+  getMemberDetail() {
+    let inputedMember = this.inputMember();
+    if (!inputedMember) return;
+    this.member = inputedMember;
+  }
+
+  getFormGroup(): void {
+    if (!this.member) {
       return;
     }
-    if(this.memberForm){
+    if (this.memberForm) {
       this.updateFormGroup();
       return;
     }
@@ -85,11 +88,11 @@ export class MemberDetailComponent implements OnChanges{
       role: [
         this.member.role
       ]
-    })
+    });
   }
 
-  updateFormGroup(): void{
-    if(!this.memberForm){
+  updateFormGroup(): void {
+    if (!this.memberForm) {
       return;
     }
     this.memberForm.get("id")?.setValue(this.member.id);
@@ -99,11 +102,31 @@ export class MemberDetailComponent implements OnChanges{
     this.memberForm.get("tel")?.setValue(this.member.tel);
     this.memberForm.get("email")?.setValue(this.member.email);
     this.memberForm.get("role")?.setValue(this.member.role);
+    if (this.currentOperatorRole === "ADMIN") {
+      this.memberForm.enable();
+    } else {
+      this.memberForm.disable();
+    }
   }
 
   async onSubmit(): Promise<void> {
-    console.log(this.memberForm.value);
     this.member = await this.memberManagementService.updateMember(this.memberForm.value);
-    this.router.navigate(['/member/management'])
+    this.changeOutput.emit();
+  }
+
+  async restore(): Promise<void> {
+    this.member = await this.memberManagementService.restoreMember(this.member);
+  }
+
+  async delete(): Promise<void> {
+    let decision = confirm(`Delete ${this.member.email}?`);
+    if (decision) {
+      try {
+        this.member = await this.memberManagementService.deleteMember(this.member);
+      } catch (exception) {
+        alert("Delete failed");
+        console.error(exception);
+      }
+    }
   }
 }

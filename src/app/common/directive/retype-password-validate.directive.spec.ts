@@ -1,4 +1,4 @@
-import { RetypePasswordValidateDirective } from './retype-password-validate.directive';
+import { RetypePasswordValidateDirective } from "./retype-password-validate.directive";
 
 describe('RetypePasswordValidateDirective', () => {
   it('should create an instance', () => {

@@ -5,3 +5,7 @@
 .member-management{
     display: flex;
 }
+
+.deleted-item{
+    background-color: PINK;
+}

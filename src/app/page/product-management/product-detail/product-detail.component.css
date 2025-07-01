@@ -1,0 +1,17 @@
+.product-form{
+    width: 300px;
+    margin: auto;
+    margin-left: 50%;
+
+    label{
+        margin-right: 10px;
+    }
+
+    button{
+        width: 100%;
+    }
+}
+
+.choose-one-title{
+    margin: auto;
+}

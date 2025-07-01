@@ -2,11 +2,11 @@ import { CommonModule } from '@angular/common';
 import { Component} from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { User} from '../../common/model/user.model';
-import { EmailValidateDirective } from '../../common/directive/email-validate/email-validate.directive';
 import { Member } from '../../common/model/member.model';
 import { Router } from '@angular/router';
 import { MemberService } from '../../common/service/member.service';
 import { AuthService } from '../../common/service/auth.service';
+import { EmailValidateDirective } from '../../common/directive/email-validate.directive';
 
 @Component({
   selector: 'app-login-form',

@@ -1,4 +1,6 @@
-import { AgeValidateDirective } from './age-validate.directive';
+import { AgeValidateDirective } from "./age-validate.directive";
+
+
 
 describe('AgeValidateDirective', () => {
   it('should create an instance', () => {

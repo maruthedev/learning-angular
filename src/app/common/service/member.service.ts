@@ -35,7 +35,7 @@ export class MemberService {
     let url = `${APIURL.baseURL}:${APIURL.port}/member/login`;
     let response = await firstValueFrom(this.http.post<any>(url, user, { headers: headers }));
     try {
-      this.loggedMember = new Member(response.id, response.name, response.gender ?? undefined, response.age, response.tel, response.role, response.email, null);
+      this.loggedMember = new Member(response.id, response.name, response.gender ?? undefined, response.age, response.tel, response.role, response.is_active, response.email, null);
     } catch (exception: any) {
       console.error(exception);
     }
@@ -47,7 +47,7 @@ export class MemberService {
     let headers = new HttpHeaders().set('Content-Type', 'application/json');
     let response = await firstValueFrom(this.http.post<any>(`${APIURL.baseURL}:${APIURL.port}/member/register`, member, { headers: headers }));
     try {
-      this.loggedMember = new Member(response.id, response.name, response.gender ?? undefined, response.age, response.tel, response.role, response.email, null);
+      this.loggedMember = new Member(response.id, response.name, response.gender ?? undefined, response.age, response.tel, response.role, response.is_active, response.email, null);
     } catch (exception: any) {
       console.error(exception);
     }

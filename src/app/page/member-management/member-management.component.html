@@ -7,28 +7,20 @@
             <th>tel</th>
             <th>email</th>
             <th *ngIf="loggedMemberRole === 'ADMIN'">role</th>
-            <th *ngIf="loggedMemberRole === 'ADMIN'">operation</th>
         </thead>
         <tbody>
-            <tr *ngFor="let member of allMembers">
+            <tr *ngFor="let member of allMembers" [ngClass]="member.is_active? '' : 'deleted-item'" (click)="rowSelect(member)">
                 <td>{{ member.name }}</td>
                 <td>{{ member.gender }}</td>
                 <td>{{ member.age }}</td>
                 <td>{{ member.tel }}</td>
                 <td>{{ member.email }}</td>
                 <td *ngIf="loggedMemberRole === 'ADMIN'">{{ member.role }}</td>
-                <td *ngIf="loggedMemberRole === 'ADMIN'">
-                    <button class="btn btn-primary"
-                        (click)="edit(member.id)">EDIT</button>
-                    <button *ngIf="member.role !== 'ADMIN'"
-                        class="btn btn-danger"
-                        (click)="delete(member)">DELETE</button>
-                </td>
             </tr>
         </tbody>
     </table>
 
     <div class="member-detail">
-        <app-member-detail [inputMemberId]="editingMember?.id"></app-member-detail>
+        <app-member-detail [inputMember]="editingMember" (changeOutput)="loadData()"></app-member-detail>
     </div>
 </div>

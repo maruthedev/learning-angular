@@ -1,0 +1,11 @@
+.table{
+    width: 50%;
+}
+
+.product-management{
+    display: flex;
+}
+
+.deleted-item{
+    background-color: PINK;
+}

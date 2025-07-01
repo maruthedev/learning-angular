@@ -2,12 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Member } from '../../common/model/member.model';
-import { emailValidator } from '../../common/directive/email-validate/email-validate.directive';
-import { telValidator } from '../../common/directive/tel-validate/tel-validate.directive';
-import { ageValidator } from '../../common/directive/age-validate/age-validate.directive';
-import { retypePasswordValidator } from '../../common/directive/retype-password-validate/retype-password-validate.directive';
+import { telValidator } from '../../common/directive/tel-validate.directive';
+import { ageValidator } from '../../common/directive/age-validate.directive';
+import { retypePasswordValidator } from '../../common/directive/retype-password-validate.directive';
 import { Router } from '@angular/router';
 import { MemberService } from '../../common/service/member.service';
+import { emailValidator } from '../../common/directive/email-validate.directive';
 
 @Component({
   selector: 'app-register-form',
@@ -22,7 +22,7 @@ export class RegisterFormComponent implements OnInit {
   telRegex: RegExp = new RegExp('^0[1-9]{3}[0-9]{6}$');
   emailRegex: RegExp = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
   registMember: Member = new Member(
-    "", "", "", 0, "", "", "", ""
+    "", "", "", 0, "", "", 1, "", ""
   );
   memberForm!: FormGroup;
 
