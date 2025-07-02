@@ -60,15 +60,13 @@
             <option value="CLIENT">CLIENT</option>
         </select>
     </div>
-    <button class="btn btn-primary"
-        *ngIf="member?.is_active && currentOperatorRole ==='ADMIN'"
-        type="submit"
-        [disabled]="memberForm.invalid">Update</button>
-    <button class="btn btn-danger"
-        *ngIf="member?.is_active && currentOperatorRole ==='ADMIN'"
-        type="submit"
-        [disabled]="member?.role === 'ADMIN'"
-        (click)="delete()">Delete</button>
+    <div class="action" *ngIf="currentOperatorRole ==='ADMIN'">
+        <select class="form-select" formControlName="action">
+            <option value="UPDATE" >Update</option>
+            <option value="DELETE">Delete</option>
+        </select>
+        <button [ngClass]="memberForm.get('action')?.value == 'UPDATE'? 'btn btn-primary' : 'btn btn-danger'" [disabled]="disableAction()">Action</button>
+    </div>
 
 </form>
 <div *ngIf="!memberForm || !inputMember"

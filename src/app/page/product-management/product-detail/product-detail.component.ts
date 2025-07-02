@@ -1,4 +1,4 @@
-import { Component, input, InputSignal, OnChanges, output, OutputEmitterRef, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, input, InputSignal, OnChanges, output, OutputEmitterRef, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Product } from '../../../common/model/product.model';
 import { AuthService } from '../../../common/service/auth.service';
@@ -20,10 +20,10 @@ export class ProductDetailComponent implements OnChanges {
   productForm!: FormGroup | undefined;
   inputProduct: InputSignal<Product | undefined> = input();
   changeOutput: OutputEmitterRef<void> = output();
+  isEditing: OutputEmitterRef<string> = output();
   minPrice: number = 0.00;
   maxPrice: number = 10000.00;
   uploadFile: File | undefined;
-  productImage: File | undefined;
   previewFileUrl: string | undefined;
 
   constructor(
@@ -44,8 +44,10 @@ export class ProductDetailComponent implements OnChanges {
   async getProductDetail(): Promise<void> {
     let inputedProduct = this.inputProduct();
     this.product = inputedProduct;
-    if (!this.product || !this.product.image_url) {
-      return;
+    if (this.product) {
+      this.isEditing.emit("EDITING");
+    } else {
+      this.isEditing.emit("");
     }
   }
 
@@ -92,6 +94,9 @@ export class ProductDetailComponent implements OnChanges {
       ],
       imageHolder: [
         this.uploadFile
+      ],
+      action: [
+        "UPDATE"
       ]
     });
     this.updateFormGroup();
@@ -113,7 +118,15 @@ export class ProductDetailComponent implements OnChanges {
     }
   }
 
-  async onSubmit(): Promise<void> {
+  onSubmit(): void {
+    if (this.productForm?.get("action")?.value == "UPDATE") {
+      this.update();
+    } else {
+      this.delete();
+    }
+  }
+
+  async update(): Promise<void> {
     if (!this.productForm) {
       return;
     }
@@ -170,9 +183,20 @@ export class ProductDetailComponent implements OnChanges {
   }
 
   clearImage(): void {
+    if (this.currentOperatorRole === "CLIENT") {
+      return;
+    }
     this.uploadFile = undefined;
     this.previewFileUrl = undefined;
     this.productForm?.get("image")?.reset();
     this.productForm?.get("imageHolder")?.reset();
+  }
+
+  disableAction(): boolean {
+    if (this.productForm?.get("action")?.value == "UPDATE") {
+      return this.productForm.invalid;
+    } else {
+      return false;
+    }
   }
 }

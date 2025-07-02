@@ -87,6 +87,9 @@ export class MemberDetailComponent implements OnChanges {
       ],
       role: [
         this.member.role
+      ],
+      action: [
+        "UPDATE"
       ]
     });
     this.updateFormGroup();
@@ -110,8 +113,16 @@ export class MemberDetailComponent implements OnChanges {
     }
   }
 
-  async onSubmit(): Promise<void> {
-    if(!this.memberForm){
+  onSubmit(): void{
+    if (this.memberForm?.get("action")?.value == "UPDATE") {
+      this.update();
+    } else {
+      this.delete();
+    }
+  }
+
+  async update(): Promise<void> {
+    if (!this.memberForm) {
       return;
     }
     await this.memberManagementService.updateMember(this.memberForm.value);
@@ -119,7 +130,7 @@ export class MemberDetailComponent implements OnChanges {
   }
 
   async delete(): Promise<void> {
-    if(!this.member){
+    if (!this.member) {
       return;
     }
     let decision = confirm(`Delete ${this.member.email}?`);
@@ -131,6 +142,14 @@ export class MemberDetailComponent implements OnChanges {
         alert("Delete failed");
         console.error(exception);
       }
+    }
+  }
+
+  disableAction() {
+    if (this.memberForm?.get("action")?.value == "UPDATE") {
+      return this.memberForm.invalid;
+    } else {
+      return this.member?.role === "ADMIN";
     }
   }
 }

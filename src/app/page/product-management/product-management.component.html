@@ -1,3 +1,6 @@
+<button class="btn btn-primary"
+    (click)="addNewProduct()"
+    [disabled]="operation !== 'IDLING'">+ Add new product</button>
 <div class="product-management">
     <table class="table">
         <thead>
@@ -6,7 +9,9 @@
             <th>price</th>
         </thead>
         <tbody>
-            <tr *ngFor="let product of allProducts" (click)="rowSelect(product)" [ngClass]="(product.id == editingProduct?.id)? 'selected-item' : ''">
+            <tr *ngFor="let product of allProducts"
+                (click)="rowSelect(product)"
+                [ngClass]="(product.id == editingProduct?.id)? 'selected-item' : ''">
                 <td>{{ product.id }}</td>
                 <td>{{ product.name }}</td>
                 <td>{{ product.price | currency }}</td>
@@ -14,7 +19,21 @@
         </tbody>
     </table>
 
-    <div class="product-detail">
-        <app-product-detail [inputProduct]="editingProduct" (changeOutput)="loadData()"></app-product-detail>
+    <div class="product-detail"
+        *ngIf="operation === 'EDITING'">
+        <app-product-detail [inputProduct]="editingProduct"
+            (changeOutput)="loadData()"
+            (isEditing)="getOperation($event)"></app-product-detail>
+    </div>
+
+    <div class="adding-product"
+        *ngIf="operation === 'ADDING'">
+        <app-add-product (isAdding)="getOperation($event)"
+            (exitAdding)="loadData()"></app-add-product>
+    </div>
+
+    <div *ngIf="operation === 'IDLING'"
+        class="choose-one-title">
+        <h1>Chon mot product</h1>
     </div>
 </div>

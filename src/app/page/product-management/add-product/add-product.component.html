@@ -1,1 +1,51 @@
-<p>add-product works!</p>
+<h1 class="title">ADD</h1>
+<form *ngIf="productForm"
+    [formGroup]="productForm"
+    class="product-form"
+    (ngSubmit)="onSubmit()">
+    <div>
+        <label for="name">Name</label><label class="warn-message"
+            *ngIf="(!productForm.get('name')?.value || productForm.get('name')?.invalid) && productForm.get('name')?.touched ">Name
+            is invalid</label>
+        <input class="form-control"
+            type="text"
+            name="name"
+            id="name"
+            formControlName="name" />
+    </div>
+    <div>
+        <label for="price">Price</label><label class="warn-message"
+            *ngIf="(!productForm.get('price')?.value || productForm.get('price')?.invalid) && productForm.get('price')?.touched ">Price
+            is invalid</label>
+        <input class="form-control"
+            type="number"
+            name="price"
+            id="price"
+            formControlName="price"
+            appCurrencyTransform
+            [activeProduct]="''"/>
+    </div>
+    <div>
+        <label for="image_url">Image</label>
+        <input class="form-control"
+            type="hidden"
+            name="image_url"
+            id="image_url"
+            formControlName="image_url"/>
+        <input class="form-control"
+            type="file"
+            id="imageHolder"
+            formControlName="imageHolder"
+            (change)="onFileSelected($event)" />
+        <div *ngIf="uploadFile && previewFileUrl">
+            <img [src]="previewFileUrl"
+                width="300px"
+                height="300px" />
+            <h1 (click)="clearImage()">X</h1>
+        </div>
+    </div>
+    <button class="btn btn-primary"
+        *ngIf="product?.is_active && currentOperatorRole !=='CLIENT'"
+        type="submit"
+        [disabled]="productForm.invalid">Add</button>
+</form>

@@ -34,4 +34,10 @@ export class ProductManagementService {
     let response = await firstValueFrom(this.http.post<any>(`${APIURL.baseURL}:${APIURL.port}/product/delete`, product, { headers: headers }));
     return response;
   }
+
+  async addProduct(product: Product): Promise<Product>{
+    let headers = new HttpHeaders().set('Content-Type', 'application/json');
+    let response = await firstValueFrom(this.http.post<any>(`${APIURL.baseURL}:${APIURL.port}/product/add`, product, { headers: headers }));
+    return response;
+  }
 }

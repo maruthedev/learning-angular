@@ -14,8 +14,13 @@
 
 .choose-one-title{
     margin: auto;
+    margin-left: 50%;
 }
 
 .warn-message{
     color: red;
+}
+
+.action{
+    display: flex;
 }

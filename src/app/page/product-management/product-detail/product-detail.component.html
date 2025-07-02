@@ -1,3 +1,4 @@
+<h1 class="title">EDIT</h1>
 <form *ngIf="productForm && inputProduct"
     [formGroup]="productForm"
     class="product-form"
@@ -10,7 +11,9 @@
             formControlName="id" />
     </div>
     <div>
-        <label for="name">Name</label>
+        <label for="name">Name</label><label class="warn-message"
+            *ngIf="(!productForm.get('name')?.value || productForm.get('name')?.invalid) && productForm.get('name')?.touched ">Name
+            is invalid</label>
         <input class="form-control"
             type="text"
             name="name"
@@ -18,14 +21,17 @@
             formControlName="name" />
     </div>
     <div>
-        <label for="price">Price</label>
+        <label for="price">Price</label><label class="warn-message"
+            *ngIf="(!productForm.get('price')?.value || productForm.get('price')?.invalid) && productForm.get('price')?.touched ">Price
+            is invalid</label>
         <input class="form-control"
+            #price
             type="number"
             name="price"
             id="price"
             formControlName="price"
             appCurrencyTransform
-            [active]="(productForm.get('price')?.touched?? false) && (productForm.get('price')?.valid?? false)" />
+            [activeProduct]="product?.id?? ''" />
     </div>
     <div>
         <label for="image_url">Image</label>
@@ -33,7 +39,7 @@
             type="hidden"
             name="image_url"
             id="image_url"
-            formControlName="image_url"/>
+            formControlName="image_url" />
         <input class="form-control"
             type="file"
             id="imageHolder"
@@ -46,16 +52,11 @@
             <h1 (click)="clearImage()">X</h1>
         </div>
     </div>
-    <button class="btn btn-primary"
-        *ngIf="product?.is_active && currentOperatorRole !=='CLIENT'"
-        type="submit"
-        [disabled]="productForm.invalid">Update</button>
-    <button class="btn btn-danger"
-        *ngIf="product?.is_active && currentOperatorRole !=='CLIENT'"
-        type="submit"
-        (click)="delete()">Delete</button>
+    <div class="action" *ngIf="currentOperatorRole !=='CLIENT'">
+        <select class="form-select" formControlName="action">
+            <option value="UPDATE" >Update</option>
+            <option value="DELETE">Delete</option>
+        </select>
+        <button [ngClass]="productForm.get('action')?.value == 'UPDATE'? 'btn btn-primary' : 'btn btn-danger'" [disabled]="disableAction()">Action</button>
+    </div>
 </form>
-<div *ngIf="!productForm || !inputProduct"
-    class="choose-one-title">
-    <h1>Chon mot product</h1>
-</div>
