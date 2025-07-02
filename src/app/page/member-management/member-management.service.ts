@@ -45,17 +45,6 @@ export class MemberManagementService {
     }
   }
 
-  async restoreMember(member: Member): Promise<Member> {
-    let headers = new HttpHeaders().set('Content-Type', 'application/json');
-    let response = await firstValueFrom(this.http.post<any>(`${APIURL.baseURL}:${APIURL.port}/member/restore`, member, { headers: headers }));
-    try {
-      return response;
-    } catch (exception) {
-      console.error(exception);
-      throw exception;
-    }
-  }
-
   async getMemberDetail(memberId: string): Promise<Member> {
     let response = await firstValueFrom(this.http.get<any>(`${APIURL.baseURL}:${APIURL.port}/member/detail?memberId=${memberId}`));
     try {

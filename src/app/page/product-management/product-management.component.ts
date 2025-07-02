@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
 import { Product } from '../../common/model/product.model';
 import { ProductManagementService } from './product-management.service';
 import { CommonModule } from '@angular/common';
@@ -18,7 +18,8 @@ export class ProductManagementComponent implements OnInit{
 
   constructor(
     private productManagementService: ProductManagementService,
-    private authService: AuthService
+    private authService: AuthService,
+    private elementRef: ElementRef
   ){}
 
   async ngOnInit(): Promise<void> {
@@ -28,9 +29,18 @@ export class ProductManagementComponent implements OnInit{
 
   async loadData(): Promise<void>{
     this.allProducts = await this.productManagementService.getAllProducts();
+    this.editingProduct = undefined;
   }
 
   rowSelect(product: Product): void{
     this.editingProduct = product;
+  }
+
+  @HostListener('document:click',['$event'])
+  unselect(event: MouseEvent): void{
+    const target = event.target as HTMLElement;
+    if(!this.elementRef.nativeElement.contains(target)){
+      this.editingProduct = undefined;
+    }
   }
 }

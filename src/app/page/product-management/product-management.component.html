@@ -4,14 +4,12 @@
             <th>id</th>
             <th>name</th>
             <th>price</th>
-            <th>image</th>
         </thead>
         <tbody>
-            <tr *ngFor="let product of allProducts" (click)="rowSelect(product)" [ngClass]="product.is_active? '' : 'deleted-item'">
+            <tr *ngFor="let product of allProducts" (click)="rowSelect(product)" [ngClass]="(product.id == editingProduct?.id)? 'selected-item' : ''">
                 <td>{{ product.id }}</td>
                 <td>{{ product.name }}</td>
                 <td>{{ product.price | currency }}</td>
-                <td>{{ product.image_url }}</td>
             </tr>
         </tbody>
     </table>

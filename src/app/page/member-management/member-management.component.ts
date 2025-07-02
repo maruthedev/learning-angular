@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Member } from '../../common/model/member.model';
 import { MemberManagementService } from './member-management.service';
@@ -18,7 +18,8 @@ export class MemberManagementComponent implements OnInit{
 
   constructor(
     private authService: AuthService,
-    private memberManagementService: MemberManagementService
+    private memberManagementService: MemberManagementService,
+    private elementRef: ElementRef
   ){
     
   }
@@ -30,9 +31,18 @@ export class MemberManagementComponent implements OnInit{
 
   async loadData(): Promise<void>{
     this.allMembers = await this.memberManagementService.getAllMembers();
+    this.editingMember = undefined;
   }
 
   async rowSelect(member: Member): Promise<void>{
     this.editingMember = member;
+  }
+
+  @HostListener('document:click', ['$event'])
+  unselect(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!this.elementRef.nativeElement.contains(target)) {
+      this.editingMember = undefined;
+    }
   }
 }

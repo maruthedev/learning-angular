@@ -34,10 +34,4 @@ export class ProductManagementService {
     let response = await firstValueFrom(this.http.post<any>(`${APIURL.baseURL}:${APIURL.port}/product/delete`, product, { headers: headers }));
     return response;
   }
-
-  async restoreProduct(product: Product): Promise<Product> {
-    let headers = new HttpHeaders().set('Content-Type', 'application/json');
-    let response = await firstValueFrom(this.http.post<any>(`${APIURL.baseURL}:${APIURL.port}/product/restore`, product, { headers: headers }));
-    return response;
-  }
 }

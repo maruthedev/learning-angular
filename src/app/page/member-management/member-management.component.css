@@ -6,6 +6,6 @@
     display: flex;
 }
 
-.deleted-item{
-    background-color: PINK;
+.selected-item{
+    background-color: forestgreen;
 }

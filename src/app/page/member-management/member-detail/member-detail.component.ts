@@ -17,8 +17,8 @@ import { emailValidator } from '../../../common/directive/email-validate.directi
 })
 export class MemberDetailComponent implements OnChanges {
   currentOperatorRole!: string | null;
-  member!: Member;
-  memberForm!: FormGroup;
+  member!: Member | undefined;
+  memberForm!: FormGroup | undefined;
   inputMember: InputSignal<Member | undefined> = input();
   changeOutput: OutputEmitterRef<void> = output();
   minAge: number = 1;
@@ -41,12 +41,12 @@ export class MemberDetailComponent implements OnChanges {
 
   getMemberDetail() {
     let inputedMember = this.inputMember();
-    if (!inputedMember) return;
     this.member = inputedMember;
   }
 
   getFormGroup(): void {
     if (!this.member) {
+      this.memberForm = undefined;
       return;
     }
     if (this.memberForm) {
@@ -89,10 +89,11 @@ export class MemberDetailComponent implements OnChanges {
         this.member.role
       ]
     });
+    this.updateFormGroup();
   }
 
   updateFormGroup(): void {
-    if (!this.memberForm) {
+    if (!this.memberForm || !this.member) {
       return;
     }
     this.memberForm.get("id")?.setValue(this.member.id);
@@ -110,19 +111,22 @@ export class MemberDetailComponent implements OnChanges {
   }
 
   async onSubmit(): Promise<void> {
-    this.member = await this.memberManagementService.updateMember(this.memberForm.value);
+    if(!this.memberForm){
+      return;
+    }
+    await this.memberManagementService.updateMember(this.memberForm.value);
     this.changeOutput.emit();
   }
 
-  async restore(): Promise<void> {
-    this.member = await this.memberManagementService.restoreMember(this.member);
-  }
-
   async delete(): Promise<void> {
+    if(!this.member){
+      return;
+    }
     let decision = confirm(`Delete ${this.member.email}?`);
     if (decision) {
       try {
-        this.member = await this.memberManagementService.deleteMember(this.member);
+        await this.memberManagementService.deleteMember(this.member);
+        this.changeOutput.emit();
       } catch (exception) {
         alert("Delete failed");
         console.error(exception);

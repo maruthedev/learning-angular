@@ -7,7 +7,7 @@
             type="hidden"
             name="id"
             id="id"
-            formControlName="id"/>
+            formControlName="id" />
     </div>
     <div>
         <label for="name">Name</label>
@@ -23,17 +23,30 @@
             type="number"
             name="price"
             id="price"
-            formControlName="price" />
+            formControlName="price"
+            appCurrencyTransform
+            [active]="(productForm.get('price')?.touched?? false) && (productForm.get('price')?.valid?? false)" />
     </div>
     <div>
-        <label for="image">Image</label>
+        <label for="image_url">Image</label>
         <input class="form-control"
-            type="image"
-            name="image"
-            id="image"
-            formControlName="image" />
+            type="hidden"
+            name="image_url"
+            id="image_url"
+            formControlName="image_url"/>
+        <input class="form-control"
+            type="file"
+            id="imageHolder"
+            formControlName="imageHolder"
+            (change)="onFileSelected($event)" />
+        <div *ngIf="uploadFile && previewFileUrl">
+            <img [src]="previewFileUrl"
+                width="300px"
+                height="300px" />
+            <h1 (click)="clearImage()">X</h1>
+        </div>
     </div>
-        <button class="btn btn-primary"
+    <button class="btn btn-primary"
         *ngIf="product?.is_active && currentOperatorRole !=='CLIENT'"
         type="submit"
         [disabled]="productForm.invalid">Update</button>
@@ -41,10 +54,6 @@
         *ngIf="product?.is_active && currentOperatorRole !=='CLIENT'"
         type="submit"
         (click)="delete()">Delete</button>
-    <button class="btn btn-success"
-        *ngIf="!product?.is_active && currentOperatorRole !=='CLIENT'"
-        type="submit"
-        (click)="restore()">Restore</button>
 </form>
 <div *ngIf="!productForm || !inputProduct"
     class="choose-one-title">

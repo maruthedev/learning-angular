@@ -9,7 +9,7 @@
             <th *ngIf="loggedMemberRole === 'ADMIN'">role</th>
         </thead>
         <tbody>
-            <tr *ngFor="let member of allMembers" [ngClass]="member.is_active? '' : 'deleted-item'" (click)="rowSelect(member)">
+            <tr *ngFor="let member of allMembers" [ngClass]="(member.id == editingMember?.id) ? 'selected-item' : '' " (click)="rowSelect(member)">
                 <td>{{ member.name }}</td>
                 <td>{{ member.gender }}</td>
                 <td>{{ member.age }}</td>

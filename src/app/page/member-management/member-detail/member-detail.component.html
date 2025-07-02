@@ -67,12 +67,8 @@
     <button class="btn btn-danger"
         *ngIf="member?.is_active && currentOperatorRole ==='ADMIN'"
         type="submit"
-        [disabled]="member.role === 'ADMIN'"
+        [disabled]="member?.role === 'ADMIN'"
         (click)="delete()">Delete</button>
-    <button class="btn btn-success"
-        *ngIf="!member?.is_active && currentOperatorRole ==='ADMIN'"
-        type="submit"
-        (click)="restore()">Restore</button>
 
 </form>
 <div *ngIf="!memberForm || !inputMember"
