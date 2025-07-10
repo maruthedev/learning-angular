@@ -20,6 +20,9 @@ export class CurrencyTransformDirective implements OnChanges {
   @HostListener("blur")
   onBlur(): void {
     let element = this.elementRef.nativeElement;
+    if(!element.value || element.value.includes("$")){
+      return;
+    }
     element.type = "text";
     this.renderer.setProperty(element, "value", `$${element.value}`);
   }

@@ -7,7 +7,8 @@
             type="hidden"
             name="id"
             id="id"
-            formControlName="id" [(ngModel)]="product.id"/>
+            formControlName="id"
+            [(ngModel)]="product.id" />
     </div>
     <div>
         <label for="name">Name</label><label class="warn-message"
@@ -17,7 +18,8 @@
             type="text"
             name="name"
             id="name"
-            formControlName="name" [(ngModel)]="product.name"/>
+            formControlName="name"
+            [(ngModel)]="product.name" />
     </div>
     <div>
         <label for="price">Price</label><label class="warn-message"
@@ -30,8 +32,8 @@
             id="price"
             formControlName="price"
             appCurrencyTransform
-            [activeProduct]="product" 
-            [(ngModel)]="product.price"/>
+            [activeProduct]="product"
+            [(ngModel)]="product.price" />
     </div>
     <div>
         <label for="image_url">Image</label>
@@ -39,8 +41,8 @@
             type="hidden"
             name="image_url"
             id="image_url"
-            formControlName="image_url" 
-            [(ngModel)]="product.image_url"/>
+            formControlName="image_url"
+            [(ngModel)]="product.image_url" />
         <input class="form-control"
             type="file"
             id="imageHolder"
@@ -59,19 +61,32 @@
     </div>
     <div>
         <input id="is_discount_available"
-            type="checkbox" />
+            type="checkbox"
+            formControlName="is_discount_available"
+            [(ngModel)]="product.is_discount_available" />
         <label for="is_discount_available">is discount available</label>
     </div>
-    <div class="action"
-        *ngIf="currentOperatorRole !=='CLIENT'">
-        <select class="form-select"
-            formControlName="action">
-            <option value="UPDATE">Update</option>
-            <option value="DELETE">Delete</option>
-        </select>
-        <button type="button"
-            [ngClass]="productForm.get('action')?.value == 'UPDATE'? 'btn btn-primary' : 'btn btn-danger'"
-            [disabled]="disableAction()"
-            (click)="onSubmit()">Action</button>
+    <div class="action dropdown"
+        *ngIf="currentOperatorRole !== 'CLIENT'">
+        <button class="btn btn-primary"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false">
+            Action
+        </button>
+        <ul class="dropdown-menu">
+            <li>
+                <a class="dropdown-item text-primary"
+                    (click)="update()">
+                    Update
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item text-danger"
+                    (click)="delete()">
+                    Delete
+                </a>
+            </li>
+        </ul>
     </div>
 </form>

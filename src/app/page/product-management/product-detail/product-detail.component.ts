@@ -1,5 +1,5 @@
 import { AfterViewInit, Component, ElementRef, input, InputSignal, OnChanges, output, OutputEmitterRef, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
-import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Product } from '../../../common/model/product.model';
 import { AuthService } from '../../../common/service/auth.service';
 import { ProductManagementService } from '../product-management.service';
@@ -10,7 +10,7 @@ import { APIURL } from '../../../../environments/api.environment';
 
 @Component({
   selector: 'app-product-detail',
-  imports: [ReactiveFormsModule, CommonModule, CurrencyTransformDirective],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, CurrencyTransformDirective],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.css'
 })
@@ -83,7 +83,7 @@ export class ProductDetailComponent implements OnChanges {
         ]
       ],
       price: [
-        "",
+        0,
         [
           Validators.min(this.minPrice),
           Validators.max(this.maxPrice),
@@ -95,6 +95,9 @@ export class ProductDetailComponent implements OnChanges {
       ],
       imageHolder: [
         this.uploadFile
+      ],
+      is_discount_available: [
+        false
       ],
       action: [
         "UPDATE"
@@ -112,20 +115,13 @@ export class ProductDetailComponent implements OnChanges {
       name: this.product.name,
       price: this.product.price,
       image: this.product.image_url,
+      is_discount_available: this.product.is_discount_available
     })
     this.productForm.get("imageHolder")?.reset();
     if (this.currentOperatorRole === "CLIENT") {
       this.productForm.disable();
     } else {
       this.productForm.enable();
-    }
-  }
-
-  onSubmit(): void {
-    if (this.productForm?.get("action")?.value == "UPDATE") {
-      this.update();
-    } else {
-      this.delete();
     }
   }
 
@@ -138,6 +134,7 @@ export class ProductDetailComponent implements OnChanges {
     if (uploadImgUrl) {
       this.productForm.get("image_url")?.setValue(uploadImgUrl);
     }
+    this.product.is_discount_available = Number(this.product.is_discount_available);
     await this.productManagementService.updateProduct(this.product);
     this.changeOutput.emit();
   }

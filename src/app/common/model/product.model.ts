@@ -4,14 +4,14 @@ export class Product{
     public price: number;
     public image_url: string;
     public is_active: number;
-    public is_discount_available: number;
+    public is_discount_available: number | boolean;
     constructor(
         id: string,
         name: string,
         price: number,
         image_url: string,
         is_active: number,
-        is_discount_available: number
+        is_discount_available: number | boolean
     ){
         this.id = id;
         this.name = name;
