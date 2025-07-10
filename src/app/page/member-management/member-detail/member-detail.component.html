@@ -1,6 +1,5 @@
 <form *ngIf="memberForm && inputMember"
     [formGroup]="memberForm"
-    (ngSubmit)="onSubmit()"
     class="member-form">
     <div>
         <input id="id"
@@ -15,26 +14,27 @@
         <input id="name"
             formControlName="name"
             class="form-control"
-            type="text" />
+            type="text"
+            appFisrtFieldAutoFocus
+            [object]="inputMember()?.id" />
     </div>
     <div>
         <label for="gender">Gender</label>
-        <select id="gender"
+        <input id="genderMale"
+            type="radio"
             formControlName="gender"
-            class="form-control">
-            <option value="null"
-                hidden
-                selected></option>
-            <option value="Male">Male</option>
-            <option value="Female">Female</option>
-        </select>
+            value="Male" /><label for="genderMale">Male</label>
+        <input id="genderFemale"
+            type="radio"
+            formControlName="gender"
+            value="Female" /><label for="genderFemale">Female</label>
     </div>
     <div>
         <label for="age">Age</label><label class="warn-message"
             *ngIf="(memberForm.get('age')?.hasError('outRangeAge') || memberForm.get('age')?.invalid) && memberForm.get('age')?.touched ">Input
             age between
             {{minAge}}-{{maxAge}}</label>
-        <input id="age" [ngModel]="member?.age"
+        <input id="age"
             formControlName="age"
             class="form-control"
             type="number" />
@@ -60,12 +60,42 @@
             <option value="CLIENT">CLIENT</option>
         </select>
     </div>
-    <div class="action" *ngIf="currentOperatorRole ==='ADMIN'">
-        <select class="form-select" formControlName="action">
-            <option value="UPDATE" >Update</option>
-            <option value="DELETE">Delete</option>
-        </select>
-        <button [ngClass]="memberForm.get('action')?.value == 'UPDATE'? 'btn btn-primary' : 'btn btn-danger'" [disabled]="disableAction()">Action</button>
+    <div>
+        <label for="avatar_image_url">Avatar</label>
+        <input class="form-control"
+            type="text"
+            name="avatar_image_url"
+            id="avatar_image_url"
+            formControlName="avatar_image_url" 
+            (change)="onFileSelected($event)"/>
+        <div>
+            <img [src]="previewFileUrl"
+                width="300px"
+                height="300px" />
+        </div>
+    </div>
+    <div class="action dropdown"
+        *ngIf="currentOperatorRole !== 'CLIENT'">
+        <button class="btn btn-primary"
+            type="button"
+            data-bs-toggle="dropdown"
+            aria-expanded="false">
+            Action
+        </button>
+        <ul class="dropdown-menu">
+            <li>
+                <a class="dropdown-item text-primary"
+                    (click)="update()">
+                    Update
+                </a>
+            </li>
+            <li>
+                <a class="dropdown-item text-danger"
+                    (click)="delete()">
+                    Delete
+                </a>
+            </li>
+        </ul>
     </div>
 
 </form>

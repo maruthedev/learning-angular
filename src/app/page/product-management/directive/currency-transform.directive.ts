@@ -24,6 +24,9 @@ export class CurrencyTransformDirective implements OnChanges {
       return;
     }
     element.type = "text";
+    if(!element.value.includes(".")){
+      element.value = `${element.value}.00`;
+    }
     this.renderer.setProperty(element, "value", `$${element.value}`);
   }
 

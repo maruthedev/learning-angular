@@ -7,11 +7,12 @@ import { CommonModule } from '@angular/common';
 import { MemberManagementService } from '../member-management.service';
 import { AuthService } from '../../../common/service/auth.service';
 import { emailValidator } from '../../../common/directive/email-validate.directive';
+import { FisrtFieldAutoFocusDirective } from '../../../common/directive/fisrt-field-auto-focus.directive';
 
 
 @Component({
   selector: 'app-member-detail',
-  imports: [CommonModule, ReactiveFormsModule],
+  imports: [CommonModule, ReactiveFormsModule, FisrtFieldAutoFocusDirective],
   templateUrl: './member-detail.component.html',
   styleUrl: './member-detail.component.css'
 })
@@ -25,6 +26,7 @@ export class MemberDetailComponent implements OnChanges {
   maxAge: number = 999;
   telRegex: RegExp = new RegExp('^0[1-9]{3}[0-9]{6}$');
   emailRegex: RegExp = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
+  previewFileUrl: string | undefined;
 
   constructor(
     private formBuilder: FormBuilder,
@@ -37,6 +39,7 @@ export class MemberDetailComponent implements OnChanges {
   ngOnChanges(changes: SimpleChanges): void {
     this.getMemberDetail();
     this.getFormGroup();
+    this.updatePreviewImage();
   }
 
   getMemberDetail() {
@@ -88,8 +91,8 @@ export class MemberDetailComponent implements OnChanges {
       role: [
         this.member.role
       ],
-      action: [
-        "UPDATE"
+      avatar_image_url: [
+        this.member.avatar_image_url
       ]
     });
     this.updateFormGroup();
@@ -106,6 +109,7 @@ export class MemberDetailComponent implements OnChanges {
     this.memberForm.get("tel")?.setValue(this.member.tel);
     this.memberForm.get("email")?.setValue(this.member.email);
     this.memberForm.get("role")?.setValue(this.member.role);
+    this.memberForm.get("avatar_image_url")?.setValue(this.member.avatar_image_url);
     if (this.currentOperatorRole === "ADMIN") {
       this.memberForm.enable();
     } else {
@@ -113,19 +117,15 @@ export class MemberDetailComponent implements OnChanges {
     }
   }
 
-  onSubmit(): void{
-    if (this.memberForm?.get("action")?.value == "UPDATE") {
-      this.update();
-    } else {
-      this.delete();
-    }
-  }
-
   async update(): Promise<void> {
     if (!this.memberForm) {
       return;
     }
-    await this.memberManagementService.updateMember(this.memberForm.value);
+    this.member = this.memberForm.value;
+    if(!this.member){
+      return;
+    }
+    await this.memberManagementService.updateMember(this.member);
     this.changeOutput.emit();
   }
 
@@ -151,5 +151,17 @@ export class MemberDetailComponent implements OnChanges {
     } else {
       return this.member?.role === "ADMIN";
     }
+  }
+
+  onFileSelected(event: Event) {
+    let imageInputUrl = this.memberForm?.get("avatar_image_url");
+    if(!imageInputUrl){
+      return;
+    }
+    this.previewFileUrl = imageInputUrl.value;
+  }
+
+  updatePreviewImage(): void{
+    this.previewFileUrl = this.member?.avatar_image_url?? "";
   }
 }

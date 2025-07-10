@@ -7,8 +7,7 @@
             type="hidden"
             name="id"
             id="id"
-            formControlName="id"
-            [(ngModel)]="product.id" />
+            formControlName="id"/>
     </div>
     <div>
         <label for="name">Name</label><label class="warn-message"
@@ -19,7 +18,8 @@
             name="name"
             id="name"
             formControlName="name"
-            [(ngModel)]="product.name" />
+            appFisrtFieldAutoFocus
+            [object]="inputProduct().id"/>
     </div>
     <div>
         <label for="price">Price</label><label class="warn-message"
@@ -32,8 +32,7 @@
             id="price"
             formControlName="price"
             appCurrencyTransform
-            [activeProduct]="product"
-            [(ngModel)]="product.price" />
+            [activeProduct]="product"/>
     </div>
     <div>
         <label for="image_url">Image</label>
@@ -41,18 +40,20 @@
             type="hidden"
             name="image_url"
             id="image_url"
-            formControlName="image_url"
-            [(ngModel)]="product.image_url" />
+            formControlName="image_url"/>
         <input class="form-control"
             type="file"
             id="imageHolder"
             formControlName="imageHolder"
             (change)="onFileSelected($event)"
-            *ngIf="!uploadFile" />
-        <button class="btn btn-danger"
-            type="button"
-            *ngIf="uploadFile && previewFileUrl"
-            (click)="clearImage()">Remove image</button>
+            style="display: none" />
+        <div style="display: flex;">
+            <label for="imageHolder" for="imageHolder" class="btn btn-primary">Choose Image</label>
+            <button class="btn btn-danger"
+                type="button"
+                *ngIf="uploadFile && previewFileUrl"
+                (click)="clearImage()">Remove image</button>
+        </div>
         <div>
             <img [src]="previewFileUrl"
                 width="300px"
@@ -62,8 +63,7 @@
     <div>
         <input id="is_discount_available"
             type="checkbox"
-            formControlName="is_discount_available"
-            [(ngModel)]="product.is_discount_available" />
+            formControlName="is_discount_available"/>
         <label for="is_discount_available">is discount available</label>
     </div>
     <div class="action dropdown"

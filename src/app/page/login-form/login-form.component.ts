@@ -7,10 +7,11 @@ import { Router } from '@angular/router';
 import { MemberService } from '../../common/service/member.service';
 import { AuthService } from '../../common/service/auth.service';
 import { EmailValidateDirective } from '../../common/directive/email-validate.directive';
+import { FisrtFieldAutoFocusDirective } from '../../common/directive/fisrt-field-auto-focus.directive';
 
 @Component({
   selector: 'app-login-form',
-  imports: [FormsModule, CommonModule, EmailValidateDirective],
+  imports: [FormsModule, CommonModule, EmailValidateDirective, FisrtFieldAutoFocusDirective],
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.css'
 })

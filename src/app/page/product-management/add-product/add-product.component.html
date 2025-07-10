@@ -11,7 +11,8 @@
             type="text"
             name="name"
             id="name"
-            formControlName="name" />
+            formControlName="name"
+            appFisrtFieldAutoFocus />
     </div>
     <div>
         <label for="price">Price</label><label class="warn-message"
@@ -23,7 +24,7 @@
             id="price"
             formControlName="price"
             appCurrencyTransform
-            [activeProduct]="product"/>
+            [activeProduct]="product" />
     </div>
     <div>
         <label for="image_url">Image</label>
@@ -31,18 +32,33 @@
             type="hidden"
             name="image_url"
             id="image_url"
-            formControlName="image_url"/>
+            formControlName="image_url" />
         <input class="form-control"
             type="file"
             id="imageHolder"
             formControlName="imageHolder"
-            (change)="onFileSelected($event)" />
-        <div *ngIf="uploadFile && previewFileUrl">
+            (change)="onFileSelected($event)"
+            style="display: none" />
+        <div style="display: flex;">
+            <label for="imageHolder"
+                for="imageHolder"
+                class="btn btn-primary">Choose Image</label>
+            <button class="btn btn-danger"
+                type="button"
+                *ngIf="uploadFile && previewFileUrl"
+                (click)="clearImage()">Remove image</button>
+        </div>
+        <div>
             <img [src]="previewFileUrl"
                 width="300px"
                 height="300px" />
-            <h1 (click)="clearImage()">X</h1>
         </div>
+    </div>
+    <div>
+        <input id="is_discount_available"
+            type="checkbox"
+            formControlName="is_discount_available" />
+        <label for="is_discount_available">is discount available</label>
     </div>
     <button class="btn btn-primary"
         *ngIf="product?.is_active && currentOperatorRole !=='CLIENT'"

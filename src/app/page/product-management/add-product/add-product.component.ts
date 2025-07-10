@@ -6,10 +6,11 @@ import { CurrencyTransformDirective } from '../directive/currency-transform.dire
 import { AuthService } from '../../../common/service/auth.service';
 import { UploadFileService } from '../../../common/service/upload-file.service';
 import { ProductManagementService } from '../product-management.service';
+import { FisrtFieldAutoFocusDirective } from '../../../common/directive/fisrt-field-auto-focus.directive';
 
 @Component({
   selector: 'app-add-product',
-  imports: [ReactiveFormsModule, CommonModule, CurrencyTransformDirective],
+  imports: [ReactiveFormsModule, CommonModule, CurrencyTransformDirective, FisrtFieldAutoFocusDirective],
   templateUrl: './add-product.component.html',
   styleUrl: './add-product.component.css'
 })
@@ -64,6 +65,9 @@ export class AddProductComponent implements OnInit{
       ],
       imageHolder: [
         this.uploadFile
+      ],
+      is_discount_available: [
+        this.product.is_discount_available
       ]
     });
   }
@@ -76,8 +80,9 @@ export class AddProductComponent implements OnInit{
     if (uploadImgUrl) {
       this.productForm.get("image_url")?.setValue(uploadImgUrl);
     }
-    let updatingProduct = this.productForm.value;
-    await this.productManagementService.addProduct(updatingProduct);
+    let addingProduct: Product = this.productForm.value;
+    addingProduct.is_discount_available = Number(addingProduct.is_discount_available);
+    await this.productManagementService.addProduct(addingProduct);
     this.exitAdding.emit();
   }
 

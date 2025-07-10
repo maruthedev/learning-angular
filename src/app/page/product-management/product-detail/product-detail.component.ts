@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, input, InputSignal, OnChanges, output, OutputEmitterRef, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, input, InputSignal, OnChanges, output, OutputEmitterRef, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Product } from '../../../common/model/product.model';
 import { AuthService } from '../../../common/service/auth.service';
@@ -7,10 +7,11 @@ import { CommonModule } from '@angular/common';
 import { CurrencyTransformDirective } from '../directive/currency-transform.directive';
 import { UploadFileService } from '../../../common/service/upload-file.service';
 import { APIURL } from '../../../../environments/api.environment';
+import { FisrtFieldAutoFocusDirective } from '../../../common/directive/fisrt-field-auto-focus.directive';
 
 @Component({
   selector: 'app-product-detail',
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, CurrencyTransformDirective],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, CurrencyTransformDirective, FisrtFieldAutoFocusDirective],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.css'
 })
@@ -38,12 +39,12 @@ export class ProductDetailComponent implements OnChanges {
   }
 
   async ngOnChanges(changes: SimpleChanges): Promise<void> {
-    await this.getProductDetail();
+    this.getProductDetail();
     await this.updatePreviewImage();
     this.getProductForm();
   }
 
-  async getProductDetail(): Promise<void> {
+  getProductDetail(): void {
     this.product = this.inputProduct();
     if (this.product) {
       this.isEditing.emit("EDITING");
@@ -73,7 +74,7 @@ export class ProductDetailComponent implements OnChanges {
     }
     this.productForm = this.formBuilder.group({
       id: [
-        ""
+        this.product.id
       ],
       name: [
         "",
@@ -83,7 +84,7 @@ export class ProductDetailComponent implements OnChanges {
         ]
       ],
       price: [
-        0,
+        this.product.price,
         [
           Validators.min(this.minPrice),
           Validators.max(this.maxPrice),
@@ -91,16 +92,13 @@ export class ProductDetailComponent implements OnChanges {
         ]
       ],
       image_url: [
-        ""
+        this.product.image_url
       ],
       imageHolder: [
         this.uploadFile
       ],
       is_discount_available: [
-        false
-      ],
-      action: [
-        "UPDATE"
+        this.product.is_discount_available
       ]
     });
     this.updateFormGroup();
@@ -126,7 +124,6 @@ export class ProductDetailComponent implements OnChanges {
   }
 
   async update(): Promise<void> {
-    console.log(this.product);
     if (!this.productForm) {
       return;
     }
@@ -134,6 +131,7 @@ export class ProductDetailComponent implements OnChanges {
     if (uploadImgUrl) {
       this.productForm.get("image_url")?.setValue(uploadImgUrl);
     }
+    this.product = this.productForm.value;
     this.product.is_discount_available = Number(this.product.is_discount_available);
     await this.productManagementService.updateProduct(this.product);
     this.changeOutput.emit();
@@ -188,7 +186,6 @@ export class ProductDetailComponent implements OnChanges {
     }
     this.uploadFile = undefined;
     this.previewFileUrl = undefined;
-    this.product.image_url = "";
     this.productForm?.get("imageHolder")?.reset();
   }
 

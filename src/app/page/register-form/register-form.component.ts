@@ -8,10 +8,11 @@ import { retypePasswordValidator } from '../../common/directive/retype-password-
 import { Router } from '@angular/router';
 import { MemberService } from '../../common/service/member.service';
 import { emailValidator } from '../../common/directive/email-validate.directive';
+import { FisrtFieldAutoFocusDirective } from '../../common/directive/fisrt-field-auto-focus.directive';
 
 @Component({
   selector: 'app-register-form',
-  imports: [ReactiveFormsModule, CommonModule],
+  imports: [ReactiveFormsModule, CommonModule, FisrtFieldAutoFocusDirective],
   templateUrl: './register-form.component.html',
   styleUrl: './register-form.component.css'
 })
@@ -22,7 +23,7 @@ export class RegisterFormComponent implements OnInit {
   telRegex: RegExp = new RegExp('^0[1-9]{3}[0-9]{6}$');
   emailRegex: RegExp = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
   registMember: Member = new Member(
-    "", "", "", 0, "", "", 1, "", ""
+    "", "", "", 0, "", "", 1, "", "", null
   );
   memberForm!: FormGroup;
 
