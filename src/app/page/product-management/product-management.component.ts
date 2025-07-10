@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, input, InputSignal, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Product } from '../../common/model/product.model';
 import { ProductManagementService } from './product-management.service';
 import { CommonModule } from '@angular/common';
@@ -12,54 +12,39 @@ import { AddProductComponent } from './add-product/add-product.component';
   templateUrl: './product-management.component.html',
   styleUrl: './product-management.component.css'
 })
-export class ProductManagementComponent implements OnInit{
+export class ProductManagementComponent implements OnInit {
   allProducts: Array<Product> = [];
   memberRole!: string | null;
-  editingProduct: Product | undefined;
+  editingProduct: Product = Product.getEmptyProduct();
   operation: string = "IDLING";
 
   constructor(
     private productManagementService: ProductManagementService,
-    private authService: AuthService,
-    private elementRef: ElementRef
-  ){}
+    private authService: AuthService
+  ) { }
 
   async ngOnInit(): Promise<void> {
     this.memberRole = this.authService.getMemberRole();
     await this.loadData();
   }
 
-  async loadData(): Promise<void>{
+  async loadData(): Promise<void> {
     this.allProducts = await this.productManagementService.getAllProducts();
-    this.editingProduct = undefined;
+    this.editingProduct = Product.getEmptyProduct();
     this.operation = "IDLING";
   }
 
-  rowSelect(product: Product): void{
-    if(this.operation == "ADDING"){
-      return;
-    }
+  rowSelect(product: Product): void {
     this.operation = "EDITING";
     this.editingProduct = product;
   }
 
-  @HostListener('document:click',['$event'])
-  unselect(event: MouseEvent): void{
-    const target = event.target as HTMLElement;
-    if(!this.elementRef.nativeElement.contains(target)){
-      this.editingProduct = undefined;
-      this.operation = "IDLING";
-    }
-  }
-
-  getOperation(event: any): void{
+  getOperation(event: any): void {
     this.operation = event;
   }
 
-  addNewProduct(): void{
-    if(this.operation == "EDITING"){
-      return;
-    }
+  addNewProduct(): void {
     this.operation = "ADDING";
+    this.editingProduct = Product.getEmptyProduct();
   }
 }

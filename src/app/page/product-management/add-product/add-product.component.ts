@@ -15,7 +15,7 @@ import { ProductManagementService } from '../product-management.service';
 })
 export class AddProductComponent implements OnInit{
   currentOperatorRole: string | null;
-  product: Product = new Product("", "", 0, "", 1);
+  product: Product = Product.getEmptyProduct();
   productForm: FormGroup | undefined;
   minPrice: number = 0.00;
   maxPrice: number = 10000.00;
@@ -110,13 +110,5 @@ export class AddProductComponent implements OnInit{
       };
       reader.readAsDataURL(this.uploadFile);
     }
-  }
-
-  @HostListener('document:click', ['$event'])
-  unselect(event: MouseEvent): void {
-    const target = event.target as HTMLElement;
-    if (!this.elementRef.nativeElement.contains(target)) {
-      this.exitAdding.emit();
-    }
-  }
+  } 
 }

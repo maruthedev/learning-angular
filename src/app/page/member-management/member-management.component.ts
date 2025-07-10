@@ -37,12 +37,4 @@ export class MemberManagementComponent implements OnInit{
   async rowSelect(member: Member): Promise<void>{
     this.editingMember = member;
   }
-
-  @HostListener('document:click', ['$event'])
-  unselect(event: MouseEvent) {
-    const target = event.target as HTMLElement;
-    if (!this.elementRef.nativeElement.contains(target)) {
-      this.editingMember = undefined;
-    }
-  }
 }

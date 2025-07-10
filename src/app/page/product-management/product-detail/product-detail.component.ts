@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, input, InputSignal, OnChanges, output, OutputEmitterRef, SimpleChanges, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, input, InputSignal, OnChanges, output, OutputEmitterRef, Renderer2, SimpleChanges, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { Product } from '../../../common/model/product.model';
 import { AuthService } from '../../../common/service/auth.service';
@@ -16,21 +16,23 @@ import { APIURL } from '../../../../environments/api.environment';
 })
 export class ProductDetailComponent implements OnChanges {
   currentOperatorRole!: string | null;
-  product!: Product | undefined;
+  product: Product = Product.getEmptyProduct();
   productForm!: FormGroup | undefined;
-  inputProduct: InputSignal<Product | undefined> = input();
+  inputProduct: InputSignal<Product> = input(Product.getEmptyProduct());
   changeOutput: OutputEmitterRef<void> = output();
   isEditing: OutputEmitterRef<string> = output();
   minPrice: number = 0.00;
   maxPrice: number = 10000.00;
   uploadFile: File | undefined;
   previewFileUrl: string | undefined;
+  @ViewChild("priceElement") priceElement!: ElementRef;
 
   constructor(
     private authService: AuthService,
     private productManagementService: ProductManagementService,
     private formBuilder: FormBuilder,
-    private uploadFileService: UploadFileService
+    private uploadFileService: UploadFileService,
+    private renderer: Renderer2
   ) {
     this.currentOperatorRole = authService.getMemberRole();
   }
@@ -42,8 +44,7 @@ export class ProductDetailComponent implements OnChanges {
   }
 
   async getProductDetail(): Promise<void> {
-    let inputedProduct = this.inputProduct();
-    this.product = inputedProduct;
+    this.product = this.inputProduct();
     if (this.product) {
       this.isEditing.emit("EDITING");
     } else {
@@ -72,25 +73,25 @@ export class ProductDetailComponent implements OnChanges {
     }
     this.productForm = this.formBuilder.group({
       id: [
-        this.product.id
+        ""
       ],
       name: [
-        this.product.name,
+        "",
         [
           Validators.maxLength(20),
           Validators.required
         ]
       ],
       price: [
-        this.product.price,
+        "",
         [
           Validators.min(this.minPrice),
           Validators.max(this.maxPrice),
-          Validators.required
+          Validators.required,
         ]
       ],
       image_url: [
-        this.product.image_url
+        ""
       ],
       imageHolder: [
         this.uploadFile
@@ -106,10 +107,12 @@ export class ProductDetailComponent implements OnChanges {
     if (!this.productForm || !this.product) {
       return;
     }
-    this.productForm.get("id")?.setValue(this.product.id);
-    this.productForm.get("name")?.setValue(this.product.name);
-    this.productForm.get("price")?.setValue(this.product.price);
-    this.productForm.get("image")?.setValue(this.product.image_url);
+    this.productForm.patchValue({
+      id: this.product.id,
+      name: this.product.name,
+      price: this.product.price,
+      image: this.product.image_url,
+    })
     this.productForm.get("imageHolder")?.reset();
     if (this.currentOperatorRole === "CLIENT") {
       this.productForm.disable();
@@ -127,6 +130,7 @@ export class ProductDetailComponent implements OnChanges {
   }
 
   async update(): Promise<void> {
+    console.log(this.product);
     if (!this.productForm) {
       return;
     }
@@ -134,8 +138,7 @@ export class ProductDetailComponent implements OnChanges {
     if (uploadImgUrl) {
       this.productForm.get("image_url")?.setValue(uploadImgUrl);
     }
-    let updatingProduct = this.productForm.value;
-    await this.productManagementService.updateProduct(updatingProduct);
+    await this.productManagementService.updateProduct(this.product);
     this.changeOutput.emit();
   }
 
@@ -188,7 +191,7 @@ export class ProductDetailComponent implements OnChanges {
     }
     this.uploadFile = undefined;
     this.previewFileUrl = undefined;
-    this.productForm?.get("image")?.reset();
+    this.product.image_url = "";
     this.productForm?.get("imageHolder")?.reset();
   }
 

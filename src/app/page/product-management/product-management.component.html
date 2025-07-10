@@ -1,20 +1,24 @@
 <button class="btn btn-primary"
     (click)="addNewProduct()"
-    [disabled]="operation !== 'IDLING'">+ Add new product</button>
+    [disabled]="operation === 'ADDING'">+ Add new product</button>
 <div class="product-management">
     <table class="table">
         <thead>
             <th>id</th>
             <th>name</th>
             <th>price</th>
+            <th>discount available</th>
         </thead>
         <tbody>
             <tr *ngFor="let product of allProducts"
                 (click)="rowSelect(product)"
-                [ngClass]="(product.id == editingProduct?.id)? 'selected-item' : ''">
+                [ngClass]="(product.id == editingProduct.id)? 'selected-item' : ''">
                 <td>{{ product.id }}</td>
                 <td>{{ product.name }}</td>
                 <td>{{ product.price | currency }}</td>
+                <td>
+                    <div *ngIf="product.is_discount_available">&#10004;</div>
+                </td>
             </tr>
         </tbody>
     </table>

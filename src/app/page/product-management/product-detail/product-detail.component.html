@@ -1,14 +1,13 @@
 <h1 class="title">EDIT</h1>
-<form *ngIf="productForm && inputProduct"
+<form *ngIf="productForm && inputProduct().id != ''"
     [formGroup]="productForm"
-    class="product-form"
-    (ngSubmit)="onSubmit()">
-    <div>
+    class="product-form">
+    <div class="input-group">
         <input class="form-control"
             type="hidden"
             name="id"
             id="id"
-            formControlName="id" />
+            formControlName="id" [(ngModel)]="product.id"/>
     </div>
     <div>
         <label for="name">Name</label><label class="warn-message"
@@ -18,20 +17,21 @@
             type="text"
             name="name"
             id="name"
-            formControlName="name" />
+            formControlName="name" [(ngModel)]="product.name"/>
     </div>
     <div>
         <label for="price">Price</label><label class="warn-message"
             *ngIf="(!productForm.get('price')?.value || productForm.get('price')?.invalid) && productForm.get('price')?.touched ">Price
             is invalid</label>
         <input class="form-control"
-            #price
+            #priceElement
             type="number"
             name="price"
             id="price"
             formControlName="price"
             appCurrencyTransform
-            [activeProduct]="product?.id?? ''" />
+            [activeProduct]="product" 
+            [(ngModel)]="product.price"/>
     </div>
     <div>
         <label for="image_url">Image</label>
@@ -39,24 +39,39 @@
             type="hidden"
             name="image_url"
             id="image_url"
-            formControlName="image_url" />
+            formControlName="image_url" 
+            [(ngModel)]="product.image_url"/>
         <input class="form-control"
             type="file"
             id="imageHolder"
             formControlName="imageHolder"
-            (change)="onFileSelected($event)" />
-        <div *ngIf="uploadFile && previewFileUrl">
+            (change)="onFileSelected($event)"
+            *ngIf="!uploadFile" />
+        <button class="btn btn-danger"
+            type="button"
+            *ngIf="uploadFile && previewFileUrl"
+            (click)="clearImage()">Remove image</button>
+        <div>
             <img [src]="previewFileUrl"
                 width="300px"
                 height="300px" />
-            <h1 (click)="clearImage()">X</h1>
         </div>
     </div>
-    <div class="action" *ngIf="currentOperatorRole !=='CLIENT'">
-        <select class="form-select" formControlName="action">
-            <option value="UPDATE" >Update</option>
+    <div>
+        <input id="is_discount_available"
+            type="checkbox" />
+        <label for="is_discount_available">is discount available</label>
+    </div>
+    <div class="action"
+        *ngIf="currentOperatorRole !=='CLIENT'">
+        <select class="form-select"
+            formControlName="action">
+            <option value="UPDATE">Update</option>
             <option value="DELETE">Delete</option>
         </select>
-        <button [ngClass]="productForm.get('action')?.value == 'UPDATE'? 'btn btn-primary' : 'btn btn-danger'" [disabled]="disableAction()">Action</button>
+        <button type="button"
+            [ngClass]="productForm.get('action')?.value == 'UPDATE'? 'btn btn-primary' : 'btn btn-danger'"
+            [disabled]="disableAction()"
+            (click)="onSubmit()">Action</button>
     </div>
 </form>

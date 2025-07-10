@@ -1,19 +1,20 @@
-import { AfterContentInit, AfterViewChecked, AfterViewInit, Directive, ElementRef, HostBinding, HostListener, input, InputSignal, OnChanges, Renderer2, SimpleChanges } from '@angular/core';
+import { Directive, ElementRef, HostListener, input, InputSignal, OnChanges, Renderer2 } from '@angular/core';
+import { Product } from '../../../common/model/product.model';
 
 @Directive({
   selector: '[appCurrencyTransform]'
 })
-export class CurrencyTransformDirective implements OnChanges{
-  activeProduct: InputSignal<string> = input('');
+export class CurrencyTransformDirective implements OnChanges {
+  activeProduct: InputSignal<Product | undefined> = input();
   constructor(
     private elementRef: ElementRef,
     private renderer: Renderer2
-  ) {}
+  ) { }
 
   ngOnChanges(): void {
     setTimeout(() => {
       this.onBlur();
-    }, 10);
+    }, 10)
   }
 
   @HostListener("blur")

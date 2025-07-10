@@ -34,7 +34,7 @@
             *ngIf="(memberForm.get('age')?.hasError('outRangeAge') || memberForm.get('age')?.invalid) && memberForm.get('age')?.touched ">Input
             age between
             {{minAge}}-{{maxAge}}</label>
-        <input id="age"
+        <input id="age" [ngModel]="member?.age"
             formControlName="age"
             class="form-control"
             type="number" />
