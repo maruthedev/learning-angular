@@ -7,24 +7,24 @@
             type="hidden"
             name="id"
             id="id"
-            formControlName="id"/>
+            formControlName="id"
+            [(ngModel)]="product.id" />
     </div>
     <div>
-        <label for="name">Name</label><label class="warn-message"
-            *ngIf="(!productForm.get('name')?.value || productForm.get('name')?.invalid) && productForm.get('name')?.touched ">Name
-            is invalid</label>
+        <label for="name"
+            appRequiredField>Name</label>
         <input class="form-control"
             type="text"
             name="name"
             id="name"
             formControlName="name"
             appFisrtFieldAutoFocus
-            [object]="inputProduct().id"/>
+            [object]="inputProduct().id"
+            [(ngModel)]="product.name" />
     </div>
     <div>
-        <label for="price">Price</label><label class="warn-message"
-            *ngIf="(!productForm.get('price')?.value || productForm.get('price')?.invalid) && productForm.get('price')?.touched ">Price
-            is invalid</label>
+        <label for="price"
+            appRequiredField>Price</label>
         <input class="form-control"
             #priceElement
             type="number"
@@ -32,7 +32,8 @@
             id="price"
             formControlName="price"
             appCurrencyTransform
-            [activeProduct]="product"/>
+            [activeProduct]="product" 
+            [(ngModel)]="product.price"/>
     </div>
     <div>
         <label for="image_url">Image</label>
@@ -40,18 +41,21 @@
             type="hidden"
             name="image_url"
             id="image_url"
-            formControlName="image_url"/>
+            formControlName="image_url" 
+            [(ngModel)]="product.image_url"/>
         <input class="form-control"
             type="file"
+            #fileInput
             id="imageHolder"
-            formControlName="imageHolder"
             (change)="onFileSelected($event)"
-            style="display: none" />
+            style="display: none;" />
         <div style="display: flex;">
-            <label for="imageHolder" for="imageHolder" class="btn btn-primary">Choose Image</label>
+            <label for="imageHolder"
+                for="imageHolder"
+                class="btn btn-primary">Choose Image</label>
             <button class="btn btn-danger"
                 type="button"
-                *ngIf="uploadFile && previewFileUrl"
+                *ngIf="previewFileUrl && uploadFile"
                 (click)="clearImage()">Remove image</button>
         </div>
         <div>
@@ -63,7 +67,7 @@
     <div>
         <input id="is_discount_available"
             type="checkbox"
-            formControlName="is_discount_available"/>
+            formControlName="is_discount_available" />
         <label for="is_discount_available">is discount available</label>
     </div>
     <div class="action dropdown"
@@ -76,16 +80,18 @@
         </button>
         <ul class="dropdown-menu">
             <li>
-                <a class="dropdown-item text-primary"
+                <button type="button"
+                    class="dropdown-item text-primary"
                     (click)="update()">
                     Update
-                </a>
+                </button>
             </li>
             <li>
-                <a class="dropdown-item text-danger"
+                <button type="button"
+                    class="dropdown-item text-danger"
                     (click)="delete()">
                     Delete
-                </a>
+                </button>
             </li>
         </ul>
     </div>

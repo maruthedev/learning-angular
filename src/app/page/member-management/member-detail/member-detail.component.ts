@@ -8,11 +8,14 @@ import { MemberManagementService } from '../member-management.service';
 import { AuthService } from '../../../common/service/auth.service';
 import { emailValidator } from '../../../common/directive/email-validate.directive';
 import { FisrtFieldAutoFocusDirective } from '../../../common/directive/fisrt-field-auto-focus.directive';
+import { RequiredFieldDirective } from '../../../common/directive/required-field.directive';
+import { MatDialog } from '@angular/material/dialog';
+import { CommonPopupComponent } from '../../common/common-popup/common-popup.component';
 
 
 @Component({
   selector: 'app-member-detail',
-  imports: [CommonModule, ReactiveFormsModule, FisrtFieldAutoFocusDirective],
+  imports: [CommonModule, ReactiveFormsModule, FisrtFieldAutoFocusDirective, RequiredFieldDirective],
   templateUrl: './member-detail.component.html',
   styleUrl: './member-detail.component.css'
 })
@@ -31,7 +34,8 @@ export class MemberDetailComponent implements OnChanges {
   constructor(
     private formBuilder: FormBuilder,
     private memberManagementService: MemberManagementService,
-    private authService: AuthService
+    private authService: AuthService,
+    private matDialog: MatDialog
   ) {
     this.currentOperatorRole = authService.getMemberRole();
   }
@@ -121,8 +125,21 @@ export class MemberDetailComponent implements OnChanges {
     if (!this.memberForm) {
       return;
     }
+    if (this.memberForm.invalid) {
+      const dialog = this.matDialog.open(CommonPopupComponent, {
+        width: '300px',
+        height: '300px',
+        disableClose: true,
+        data: {
+          title: 'INVALID',
+          message: this.getAllInvalidMessages(),
+          type: 'INFORMATION'
+        }
+      });
+      return;
+    }
     this.member = this.memberForm.value;
-    if(!this.member){
+    if (!this.member) {
       return;
     }
     await this.memberManagementService.updateMember(this.member);
@@ -133,16 +150,30 @@ export class MemberDetailComponent implements OnChanges {
     if (!this.member) {
       return;
     }
-    let decision = confirm(`Delete ${this.member.email}?`);
-    if (decision) {
-      try {
-        await this.memberManagementService.deleteMember(this.member);
-        this.changeOutput.emit();
-      } catch (exception) {
-        alert("Delete failed");
-        console.error(exception);
+    const dialog = this.matDialog.open(CommonPopupComponent, {
+      width: '300px',
+      height: '300px',
+      disableClose: true,
+      data: {
+        title: 'DELETE',
+        message: `delete ${this.member.email}?`,
+        type: 'CONFIRMATION'
       }
-    }
+    });
+    dialog.afterClosed().subscribe(async result => {
+      if (result) {
+        if (!this.member) {
+          return;
+        }
+        try {
+          await this.memberManagementService.deleteMember(this.member);
+          this.changeOutput.emit();
+        } catch (exception) {
+          alert("Delete failed");
+          console.error(exception);
+        }
+      }
+    })
   }
 
   disableAction() {
@@ -155,13 +186,27 @@ export class MemberDetailComponent implements OnChanges {
 
   onFileSelected(event: Event) {
     let imageInputUrl = this.memberForm?.get("avatar_image_url");
-    if(!imageInputUrl){
+    if (!imageInputUrl) {
       return;
     }
     this.previewFileUrl = imageInputUrl.value;
   }
 
-  updatePreviewImage(): void{
-    this.previewFileUrl = this.member?.avatar_image_url?? "";
+  updatePreviewImage(): void {
+    this.previewFileUrl = this.member?.avatar_image_url ?? "";
+  }
+
+  getAllInvalidMessages(): string {
+    let result = "";
+    if((!this.memberForm?.get('name')?.value || this.memberForm.get('name')?.invalid)){
+      result += "Name is invalid. ";
+    }
+    if((this.memberForm?.get('age')?.hasError('outRangeAge') || this.memberForm?.get('age')?.invalid)){
+      result += `Input age between ${this.minAge}-${this.maxAge}. `;
+    }
+    if((this.memberForm?.get('tel')?.hasError('invalidTel') || this.memberForm?.get('tel')?.invalid)){
+      result += "Tel is invalid. ";
+    }
+    return result;
   }
 }

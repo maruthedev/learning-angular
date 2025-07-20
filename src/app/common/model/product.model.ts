@@ -24,4 +24,8 @@ export class Product{
     public static getEmptyProduct(): Product{
         return new Product("", "", 0, "", 1, 0);
     }
+
+    public static clone(product: Product){
+        return new Product(product.id, product.name, product.price, product.image_url, product.is_active, product.is_discount_available);
+    }
 }

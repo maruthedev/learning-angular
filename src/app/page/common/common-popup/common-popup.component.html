@@ -1,0 +1,4 @@
+<h1> {{ data.title }}</h1>
+<p> {{ data.message }} </p>
+<button class="btn btn-primary" (click)="confirm()">CONFIRM</button>
+<button *ngIf="data.type == 'CONFIRMATION'" class="btn btn-danger" (click)="cancel()">CANCEL</button>

@@ -1,10 +1,8 @@
 <h1 id="title">LOGIN</h1>
 <form #userForm="ngForm"
-    (ngSubmit)="onSubmit()">
+    (ngSubmit)="onSubmit(userForm)">
     <div>
-        <label for="email">Email</label>
-        <label class="warn-message"
-            *ngIf="email.invalid && email.touched">invalid email</label>
+        <label for="email" appRequiredField>Email</label>
         <input class="form-control"
             type="email"
             id="email"
@@ -18,9 +16,7 @@
             appFisrtFieldAutoFocus/>
     </div>
     <div>
-        <label for="password">Password</label>
-        <label class="warn-message"
-            *ngIf="password.invalid && password.touched">empty password</label>
+        <label for="password" appRequiredField>Password</label>
         <input class="form-control"
             type="password"
             id="password"
@@ -31,8 +27,5 @@
             required />
     </div>
     <button class="btn btn-primary"
-        type="submit"
-        [disabled]="!userForm.form.valid">Login</button>
+        type="submit">Login</button>
 </form>
-
-<div *ngIf="loggedMember" style="text-align: center;">{{loggedMember | json}}</div>

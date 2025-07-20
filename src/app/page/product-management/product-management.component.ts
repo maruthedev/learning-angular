@@ -36,7 +36,7 @@ export class ProductManagementComponent implements OnInit {
 
   rowSelect(product: Product): void {
     this.operation = "EDITING";
-    this.editingProduct = product;
+    this.editingProduct = Product.clone(product);
   }
 
   getOperation(event: any): void {

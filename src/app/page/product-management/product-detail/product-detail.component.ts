@@ -8,10 +8,14 @@ import { CurrencyTransformDirective } from '../directive/currency-transform.dire
 import { UploadFileService } from '../../../common/service/upload-file.service';
 import { APIURL } from '../../../../environments/api.environment';
 import { FisrtFieldAutoFocusDirective } from '../../../common/directive/fisrt-field-auto-focus.directive';
+import { validateImage } from '../directive/image-validate.directive';
+import { MatDialog } from '@angular/material/dialog';
+import { CommonPopupComponent } from '../../common/common-popup/common-popup.component';
+import { RequiredFieldDirective } from '../../../common/directive/required-field.directive';
 
 @Component({
   selector: 'app-product-detail',
-  imports: [FormsModule, ReactiveFormsModule, CommonModule, CurrencyTransformDirective, FisrtFieldAutoFocusDirective],
+  imports: [FormsModule, ReactiveFormsModule, CommonModule, CurrencyTransformDirective, FisrtFieldAutoFocusDirective, RequiredFieldDirective],
   templateUrl: './product-detail.component.html',
   styleUrl: './product-detail.component.css'
 })
@@ -22,18 +26,21 @@ export class ProductDetailComponent implements OnChanges {
   inputProduct: InputSignal<Product> = input(Product.getEmptyProduct());
   changeOutput: OutputEmitterRef<void> = output();
   isEditing: OutputEmitterRef<string> = output();
-  minPrice: number = 0.00;
+  minPrice: number = 0.01;
   maxPrice: number = 10000.00;
+  fileMaxSize: number = 1000000;
+  allowedTypes: Array<string> = ["image/jpeg", "image/png", "image/gif"];
   uploadFile: File | undefined;
   previewFileUrl: string | undefined;
-  @ViewChild("priceElement") priceElement!: ElementRef;
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   constructor(
     private authService: AuthService,
     private productManagementService: ProductManagementService,
     private formBuilder: FormBuilder,
     private uploadFileService: UploadFileService,
-    private renderer: Renderer2
+    private renderer: Renderer2,
+    private matDialog: MatDialog
   ) {
     this.currentOperatorRole = authService.getMemberRole();
   }
@@ -74,7 +81,7 @@ export class ProductDetailComponent implements OnChanges {
     }
     this.productForm = this.formBuilder.group({
       id: [
-        this.product.id
+        ""
       ],
       name: [
         "",
@@ -84,7 +91,7 @@ export class ProductDetailComponent implements OnChanges {
         ]
       ],
       price: [
-        this.product.price,
+        "",
         [
           Validators.min(this.minPrice),
           Validators.max(this.maxPrice),
@@ -92,13 +99,16 @@ export class ProductDetailComponent implements OnChanges {
         ]
       ],
       image_url: [
-        this.product.image_url
+        ""
       ],
       imageHolder: [
-        this.uploadFile
+        this.uploadFile,
+        [
+          validateImage(this.fileMaxSize, this.allowedTypes)
+        ]
       ],
       is_discount_available: [
-        this.product.is_discount_available
+        ""
       ]
     });
     this.updateFormGroup();
@@ -127,6 +137,19 @@ export class ProductDetailComponent implements OnChanges {
     if (!this.productForm) {
       return;
     }
+    if (this.productForm.invalid) {
+      const dialog = this.matDialog.open(CommonPopupComponent, {
+        width: '300px',
+        height: '300px',
+        disableClose: true,
+        data: {
+          title: 'INVALID',
+          message: this.getAllInvalidMessages(),
+          type: 'INFORMATION'
+        }
+      })
+      return;
+    }
     let uploadImgUrl = await this.doUploadImage();
     if (uploadImgUrl) {
       this.productForm.get("image_url")?.setValue(uploadImgUrl);
@@ -141,16 +164,27 @@ export class ProductDetailComponent implements OnChanges {
     if (!this.product) {
       return;
     }
-    let decision = confirm(`Delete ${this.product.name}?`);
-    if (decision) {
-      try {
-        await this.productManagementService.deleteProduct(this.product);
-        this.changeOutput.emit();
-      } catch (exception) {
-        alert("Delete failed");
-        console.error(exception);
+    const dialog = this.matDialog.open(CommonPopupComponent, {
+      width: '300px',
+      height: '300px',
+      disableClose: true,
+      data: {
+        title: 'DELETE',
+        message: `delete product ${this.product.id}?`,
+        type: 'CONFIRMATION'
       }
-    }
+    })
+    dialog.afterClosed().subscribe(async result => {
+      if (result) {
+        try {
+          await this.productManagementService.deleteProduct(this.product);
+          this.changeOutput.emit();
+        } catch (exception) {
+          alert("Delete failed");
+          console.error(exception);
+        }
+      }
+    })
   }
 
   onFileSelected(event: Event): void {
@@ -158,9 +192,9 @@ export class ProductDetailComponent implements OnChanges {
     let target = event.target as HTMLInputElement;
     if (target.files?.length) {
       this.uploadFile = target.files[0];
+      this.productForm?.get("imageHolder")?.setValue(target.files[0]);
       reader.onload = async () => {
         this.previewFileUrl = reader.result as string;
-        this.productForm?.get("image")?.setValue(reader.result as string);
       };
       reader.readAsDataURL(this.uploadFile);
     }
@@ -181,19 +215,27 @@ export class ProductDetailComponent implements OnChanges {
   }
 
   clearImage(): void {
-    if (this.currentOperatorRole === "CLIENT") {
+    if (this.currentOperatorRole === "CLIENT" || !this.productForm) {
       return;
     }
     this.uploadFile = undefined;
     this.previewFileUrl = undefined;
-    this.productForm?.get("imageHolder")?.reset();
+    this.productForm.get("image_url")?.reset();
+    this.productForm.get("imageHolder")?.reset();
+    this.fileInput.nativeElement.value = '';
   }
 
-  disableAction(): boolean {
-    if (this.productForm?.get("action")?.value == "UPDATE") {
-      return this.productForm.invalid;
-    } else {
-      return false;
+  getAllInvalidMessages(): string {
+    let result = "";
+    if ((!this.productForm?.get('name')?.value || this.productForm?.get('name')?.invalid)) {
+      result += "Name is invalid. ";
     }
+    if ((!this.productForm?.get('price')?.value || this.productForm?.get('price')?.invalid)) {
+      result += "Price is invalid. ";
+    }
+    if (this.productForm?.get('imageHolder')?.hasError('notValidImage')) {
+      result += "Image is invalid. Must be png, jpg, gif and size is equal or less than 1MB";
+    }
+    return result;
   }
 }

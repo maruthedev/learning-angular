@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit, output, OutputEmitterRef} from '@angular/core';
+import { Component, ElementRef, HostListener, OnInit, output, OutputEmitterRef, ViewChild } from '@angular/core';
 import { Product } from '../../../common/model/product.model';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -7,30 +7,38 @@ import { AuthService } from '../../../common/service/auth.service';
 import { UploadFileService } from '../../../common/service/upload-file.service';
 import { ProductManagementService } from '../product-management.service';
 import { FisrtFieldAutoFocusDirective } from '../../../common/directive/fisrt-field-auto-focus.directive';
+import { validateImage } from '../directive/image-validate.directive';
+import { CommonPopupComponent } from '../../common/common-popup/common-popup.component';
+import { MatDialog } from '@angular/material/dialog';
+import { RequiredFieldDirective } from '../../../common/directive/required-field.directive';
 
 @Component({
   selector: 'app-add-product',
-  imports: [ReactiveFormsModule, CommonModule, CurrencyTransformDirective, FisrtFieldAutoFocusDirective],
+  imports: [ReactiveFormsModule, CommonModule, CurrencyTransformDirective, FisrtFieldAutoFocusDirective, RequiredFieldDirective],
   templateUrl: './add-product.component.html',
   styleUrl: './add-product.component.css'
 })
-export class AddProductComponent implements OnInit{
+export class AddProductComponent implements OnInit {
   currentOperatorRole: string | null;
   product: Product = Product.getEmptyProduct();
   productForm: FormGroup | undefined;
-  minPrice: number = 0.00;
+  minPrice: number = 0.01;
   maxPrice: number = 10000.00;
+  fileMaxSize: number = 1000000;
+  allowedTypes: Array<string> = ["image/jpeg", "image/png", "image/gif"];
   uploadFile: File | undefined;
   previewFileUrl: string | undefined;
   isAdding: OutputEmitterRef<string> = output();
   exitAdding: OutputEmitterRef<void> = output();
+  @ViewChild('fileInput') fileInput!: ElementRef<HTMLInputElement>;
 
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
     private elementRef: ElementRef,
     private uploadFileService: UploadFileService,
-    private productManagementService: ProductManagementService
+    private productManagementService: ProductManagementService,
+    private matDialog: MatDialog
   ) {
     this.currentOperatorRole = authService.getMemberRole();
   }
@@ -64,7 +72,10 @@ export class AddProductComponent implements OnInit{
         this.product.image_url
       ],
       imageHolder: [
-        this.uploadFile
+        this.uploadFile,
+        [
+          validateImage(this.fileMaxSize, this.allowedTypes)
+        ]
       ],
       is_discount_available: [
         this.product.is_discount_available
@@ -74,6 +85,19 @@ export class AddProductComponent implements OnInit{
 
   async onSubmit(): Promise<void> {
     if (!this.productForm) {
+      return;
+    }
+    if (this.productForm.invalid) {
+      const dialog = this.matDialog.open(CommonPopupComponent, {
+        width: '300px',
+        height: '300px',
+        disableClose: true,
+        data: {
+          title: 'INVALID',
+          message: this.getAllInvalidMessages(),
+          type: 'INFORMATION'
+        }
+      })
       return;
     }
     let uploadImgUrl = await this.doUploadImage();
@@ -95,13 +119,14 @@ export class AddProductComponent implements OnInit{
   }
 
   clearImage() {
-    if(this.currentOperatorRole === "CLIENT"){
+    if (this.currentOperatorRole === "CLIENT") {
       return;
     }
     this.uploadFile = undefined;
     this.previewFileUrl = undefined;
-    this.productForm?.get("image")?.reset();
+    this.productForm?.get("image_url")?.reset();
     this.productForm?.get("imageHolder")?.reset();
+    this.fileInput.nativeElement.value = '';
   }
 
   onFileSelected(event: Event) {
@@ -115,5 +140,19 @@ export class AddProductComponent implements OnInit{
       };
       reader.readAsDataURL(this.uploadFile);
     }
-  } 
+  }
+
+  getAllInvalidMessages(): string {
+    let result = "";
+    if ((!this.productForm?.get('name')?.value || this.productForm?.get('name')?.invalid)) {
+      result += "Name is invalid. ";
+    }
+    if ((!this.productForm?.get('price')?.value || this.productForm?.get('price')?.invalid)) {
+      result += "Price is invalid. ";
+    }
+    if (this.productForm?.get('imageHolder')?.hasError('notValidImage')) {
+      result += "Image is invalid. Must be png, jpg, gif and size is equal or less than 1MB";
+    }
+    return result;
+  }
 }

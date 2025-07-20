@@ -9,10 +9,13 @@ import { Router } from '@angular/router';
 import { MemberService } from '../../common/service/member.service';
 import { emailValidator } from '../../common/directive/email-validate.directive';
 import { FisrtFieldAutoFocusDirective } from '../../common/directive/fisrt-field-auto-focus.directive';
+import { RequiredFieldDirective } from '../../common/directive/required-field.directive';
+import { MatDialog } from '@angular/material/dialog';
+import { CommonPopupComponent } from '../common/common-popup/common-popup.component';
 
 @Component({
   selector: 'app-register-form',
-  imports: [ReactiveFormsModule, CommonModule, FisrtFieldAutoFocusDirective],
+  imports: [ReactiveFormsModule, CommonModule, FisrtFieldAutoFocusDirective, RequiredFieldDirective],
   templateUrl: './register-form.component.html',
   styleUrl: './register-form.component.css'
 })
@@ -30,7 +33,8 @@ export class RegisterFormComponent implements OnInit {
   constructor(
     private memberService: MemberService,
     private router: Router,
-    private formBuilder: FormBuilder
+    private formBuilder: FormBuilder,
+    private matDialog: MatDialog
   ) { }
 
   ngOnInit(): void {
@@ -81,12 +85,38 @@ export class RegisterFormComponent implements OnInit {
       })
   }
 
-
   async onSubmit(): Promise<void> {
+    if (this.memberForm.invalid) {
+      const dialog = this.matDialog.open(CommonPopupComponent, {
+        width: '300px',
+        height: '300px',
+        disableClose: true,
+        data: {
+          title: 'INVALID',
+          message: this.getAllInvalidMessages(),
+          type: 'INFORMATION'
+        }
+      });
+      return;
+    }
     this.loggedMember = await this.memberService.register(this.memberForm.value);
     if (this.loggedMember) {
       confirm("REGISTER SUCCESS");
       this.router.navigate(["/login"]);
     }
+  }
+
+  getAllInvalidMessages(): string {
+    let result = "";
+    if ((!this.memberForm?.get('name')?.value || this.memberForm.get('name')?.invalid)) {
+      result += "Name is invalid. ";
+    }
+    if ((this.memberForm?.get('age')?.hasError('outRangeAge') || this.memberForm?.get('age')?.invalid)) {
+      result += `Input age between ${this.minAge}-${this.maxAge}. `;
+    }
+    if ((this.memberForm?.get('tel')?.hasError('invalidTel') || this.memberForm?.get('tel')?.invalid)) {
+      result += "Tel is invalid. ";
+    }
+    return result;
   }
 }

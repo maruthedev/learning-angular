@@ -4,10 +4,8 @@
     class="product-form"
     (ngSubmit)="onSubmit()">
     <div>
-        <label for="name">Name</label><label class="warn-message"
-            *ngIf="(!productForm.get('name')?.value || productForm.get('name')?.invalid) && productForm.get('name')?.touched ">Name
-            is invalid</label>
-        <input class="form-control"
+        <label for="name" appRequiredField>Name</label>
+        <input class="form-control" 
             type="text"
             name="name"
             id="name"
@@ -15,9 +13,7 @@
             appFisrtFieldAutoFocus />
     </div>
     <div>
-        <label for="price">Price</label><label class="warn-message"
-            *ngIf="(!productForm.get('price')?.value || productForm.get('price')?.invalid) && productForm.get('price')?.touched ">Price
-            is invalid</label>
+        <label for="price" appRequiredField>Price</label>
         <input class="form-control"
             type="number"
             name="price"
@@ -38,7 +34,8 @@
             id="imageHolder"
             formControlName="imageHolder"
             (change)="onFileSelected($event)"
-            style="display: none" />
+            style="display: none" 
+            #fileInput/>
         <div style="display: flex;">
             <label for="imageHolder"
                 for="imageHolder"
@@ -62,6 +59,5 @@
     </div>
     <button class="btn btn-primary"
         *ngIf="product?.is_active && currentOperatorRole !=='CLIENT'"
-        type="submit"
-        [disabled]="productForm.invalid">Add</button>
+        type="submit">Add</button>
 </form>
