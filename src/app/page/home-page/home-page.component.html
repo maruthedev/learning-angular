@@ -1,2 +1,2 @@
-<h1>HOME PAGE</h1>
-<p *ngIf="accessToken">logged as {{accessToken}}</p>
+<h1>{{"home_page.title" | translate}}</h1>
+<p *ngIf="access_token">{{"home_page.logged_as" | translate: {access_token} }}</p>

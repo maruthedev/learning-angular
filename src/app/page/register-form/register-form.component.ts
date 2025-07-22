@@ -12,10 +12,11 @@ import { FisrtFieldAutoFocusDirective } from '../../common/directive/fisrt-field
 import { RequiredFieldDirective } from '../../common/directive/required-field.directive';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonPopupComponent } from '../common/common-popup/common-popup.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-register-form',
-  imports: [ReactiveFormsModule, CommonModule, FisrtFieldAutoFocusDirective, RequiredFieldDirective],
+  imports: [ReactiveFormsModule, CommonModule, FisrtFieldAutoFocusDirective, RequiredFieldDirective, TranslatePipe],
   templateUrl: './register-form.component.html',
   styleUrl: './register-form.component.css'
 })

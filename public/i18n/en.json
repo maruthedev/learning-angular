@@ -1,0 +1,55 @@
+{
+    "header": {
+        "home_page": "HOME PAGE",
+        "member_management": "MEMBER MANAGEMENT",
+        "product_management": "PRODUCT MANAGEMENT",
+        "login": "LOGIN",
+        "logout": "LOGOUT",
+        "register": "REGISTER"
+    },
+    "button": {
+        "action": "ACTION",
+        "login": "LOGIN",
+        "confirm": "CONFIRM",
+        "cancel": "CANCEL",
+        "update": "UPDATE",
+        "delete": "DELETE",
+        "choose_image": "CHOOSE IMAGE",
+        "remove_image": "REMOVE IMAGE",
+        "add": "ADD",
+        "register": "REGISTER"
+    },
+    "home_page": {
+        "title": "HOME PAGE",
+        "logged_as": "logged as {{access_token}}"
+    },
+    "member_form": {
+        "email": "Email",
+        "password": "Password",
+        "name": "Name",
+        "gender": "Gender",
+        "age": "Age",
+        "tel": "Tel",
+        "role": "Role",
+        "avatar": "Avatar",
+        "detail_gender": {
+            "male": "Male",
+            "female": "Female"
+        },
+        "detail_role": {
+            "admin": "ADMIN",
+            "client": "CLIENT",
+            "user": "USER"
+        }
+    },
+    "not_found_page": {
+        "title": "404 NOT FOUND"
+    },
+    "product_form": {
+        "id": "Id",
+        "name": "Name",
+        "price": "Price",
+        "image": "Image",
+        "is_discount_available": "Is discount available"
+    }
+}

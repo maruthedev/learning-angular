@@ -12,7 +12,7 @@
     </div>
     <div>
         <label for="name"
-            appRequiredField>Name</label>
+            appRequiredField>{{"product_form.name" | translate}}</label>
         <input class="form-control"
             type="text"
             name="name"
@@ -24,7 +24,7 @@
     </div>
     <div>
         <label for="price"
-            appRequiredField>Price</label>
+            appRequiredField>{{"product_form.price" | translate}}</label>
         <input class="form-control"
             #priceElement
             type="number"
@@ -36,7 +36,7 @@
             [(ngModel)]="product.price"/>
     </div>
     <div>
-        <label for="image_url">Image</label>
+        <label for="image_url">{{"product_form.image" | translate}}</label>
         <input class="form-control"
             type="hidden"
             name="image_url"
@@ -52,11 +52,11 @@
         <div style="display: flex;">
             <label for="imageHolder"
                 for="imageHolder"
-                class="btn btn-primary">Choose Image</label>
+                class="btn btn-primary">{{"button.choose_image" | translate}}</label>
             <button class="btn btn-danger"
                 type="button"
                 *ngIf="previewFileUrl && uploadFile"
-                (click)="clearImage()">Remove image</button>
+                (click)="clearImage()">{{"button.remove_image" | translate}}</button>
         </div>
         <div>
             <img [src]="previewFileUrl"
@@ -68,7 +68,7 @@
         <input id="is_discount_available"
             type="checkbox"
             formControlName="is_discount_available" />
-        <label for="is_discount_available">is discount available</label>
+        <label for="is_discount_available">{{"product_form.is_discount_available" | translate}}</label>
     </div>
     <div class="action dropdown"
         *ngIf="currentOperatorRole !== 'CLIENT'">
@@ -76,21 +76,21 @@
             type="button"
             data-bs-toggle="dropdown"
             aria-expanded="false">
-            Action
+            {{"button.action" | translate}}
         </button>
         <ul class="dropdown-menu">
             <li>
                 <button type="button"
                     class="dropdown-item text-primary"
                     (click)="update()">
-                    Update
+                    {{"button.update" | translate}}
                 </button>
             </li>
             <li>
                 <button type="button"
                     class="dropdown-item text-danger"
                     (click)="delete()">
-                    Delete
+                    {{"button.delete" | translate}}
                 </button>
             </li>
         </ul>

@@ -11,10 +11,11 @@ import { FisrtFieldAutoFocusDirective } from '../../common/directive/fisrt-field
 import { RequiredFieldDirective } from '../../common/directive/required-field.directive';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonPopupComponent } from '../common/common-popup/common-popup.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-login-form',
-  imports: [FormsModule, CommonModule, EmailValidateDirective, FisrtFieldAutoFocusDirective, RequiredFieldDirective],
+  imports: [FormsModule, CommonModule, EmailValidateDirective, FisrtFieldAutoFocusDirective, RequiredFieldDirective, TranslatePipe],
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.css'
 })

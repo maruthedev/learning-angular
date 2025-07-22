@@ -1,12 +1,12 @@
 <div class="member-management">
     <table class="table">
         <thead>
-            <th>name</th>
-            <th>gender</th>
-            <th>age</th>
-            <th>tel</th>
-            <th>email</th>
-            <th *ngIf="loggedMemberRole === 'ADMIN'">role</th>
+            <th>{{"member_form.name" | translate}}</th>
+            <th>{{"member_form.gender" | translate}}</th>
+            <th>{{"member_form.age" | translate}}</th>
+            <th>{{"member_form.tel" | translate}}</th>
+            <th>{{"member_form.email" | translate}}</th>
+            <th *ngIf="loggedMemberRole === 'ADMIN'">{{"member_form.role" | translate}}</th>
         </thead>
         <tbody>
             <tr *ngFor="let member of allMembers" [ngClass]="(member.id == editingMember?.id) ? 'selected-item' : '' " (click)="rowSelect(member)">

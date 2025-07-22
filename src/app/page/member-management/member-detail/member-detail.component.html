@@ -8,7 +8,7 @@
             type="hidden" />
     </div>
     <div>
-        <label for="name" appRequiredField>Name</label>
+        <label for="name" appRequiredField>{{"member_form.name" | translate}}</label>
         <input id="name"
             formControlName="name"
             class="form-control"
@@ -17,43 +17,43 @@
             [object]="inputMember()?.id" />
     </div>
     <div>
-        <label for="gender">Gender</label>
+        <label for="gender">{{"member_form.gender" | translate}}</label>
         <input id="genderMale"
             type="radio"
             formControlName="gender"
-            value="Male" /><label for="genderMale">Male</label>
+            value="Male" /><label for="genderMale">{{"member_form.detail_gender.male" | translate}}</label>
         <input id="genderFemale"
             type="radio"
             formControlName="gender"
-            value="Female" /><label for="genderFemale">Female</label>
+            value="Female" /><label for="genderFemale">{{"member_form.detail_gender.female" | translate}}</label>
     </div>
     <div>
-        <label for="age" appRequiredField>Age</label>
+        <label for="age" appRequiredField>{{"member_form.age" | translate}}</label>
         <input id="age"
             formControlName="age"
             class="form-control"
             type="number" />
     </div>
     <div>
-        <label for="tel">Tel</label>
+        <label for="tel">{{"member_form.tel" | translate}}</label>
         <input id="tel"
             formControlName="tel"
             class="form-control"
             type="tel" />
     </div>
     <div>
-        <label for="role">Role</label>
+        <label for="role">{{"member_form.role" | translate}}</label>
         <select name="role"
             id="role"
             class="form-control"
             formControlName="role">
-            <option value="ADMIN">ADMIN</option>
-            <option value="USER">USER</option>
-            <option value="CLIENT">CLIENT</option>
+            <option value="ADMIN">{{"member_form.detail_role.admin" | translate}}</option>
+            <option value="USER">{{"member_form.detail_role.user" | translate}}</option>
+            <option value="CLIENT">{{"member_form.detail_role.client" | translate}}</option>
         </select>
     </div>
     <div>
-        <label for="avatar_image_url">Avatar</label>
+        <label for="avatar_image_url">{{"member_form.avatar" | translate}}</label>
         <input class="form-control"
             type="text"
             name="avatar_image_url"
@@ -72,19 +72,19 @@
             type="button"
             data-bs-toggle="dropdown"
             aria-expanded="false">
-            Action
+            {{"button.action" | translate}}
         </button>
         <ul class="dropdown-menu">
             <li>
                 <a class="dropdown-item text-primary"
                     (click)="update()">
-                    Update
+                    {{"button.update" | translate}}
                 </a>
             </li>
             <li>
                 <a class="dropdown-item text-danger"
                     (click)="delete()">
-                    Delete
+                    {{"button.delete" | translate}}
                 </a>
             </li>
         </ul>

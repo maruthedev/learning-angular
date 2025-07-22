@@ -11,11 +11,12 @@ import { FisrtFieldAutoFocusDirective } from '../../../common/directive/fisrt-fi
 import { RequiredFieldDirective } from '../../../common/directive/required-field.directive';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonPopupComponent } from '../../common/common-popup/common-popup.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 
 @Component({
   selector: 'app-member-detail',
-  imports: [CommonModule, ReactiveFormsModule, FisrtFieldAutoFocusDirective, RequiredFieldDirective],
+  imports: [CommonModule, ReactiveFormsModule, FisrtFieldAutoFocusDirective, RequiredFieldDirective, TranslatePipe],
   templateUrl: './member-detail.component.html',
   styleUrl: './member-detail.component.css'
 })

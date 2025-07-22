@@ -11,8 +11,10 @@ export class RequiredFieldDirective implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    let element: any = this.elementRef.nativeElement as HTMLElement;
-    let innerHTML: string = element.innerHTML;
-    this.renderer.setProperty(element, "innerHTML", `${innerHTML} (*)`);
+    setTimeout(() => {
+      let element: any = this.elementRef.nativeElement as HTMLElement;
+      let innerHTML: string = element.innerHTML;
+      this.renderer.setProperty(element, "innerHTML", `${innerHTML} (*)`);
+    }, 10)
   }
 }

@@ -3,30 +3,30 @@
         <span class="menu menu-left">
             <li>
                 <label><a routerLink="/home"
-                        routerLinkActive="active">HOME PAGE</a></label>
+                        routerLinkActive="active">{{"header.home_page" | translate}}</a></label>
             </li>
             <li *ngIf="accessToken && memberRole !== 'CLIENT'">
                 <label><a routerLink="/member/management"
-                        routerLinkActive="active">MEMBER MANAGEMENT</a></label>
+                        routerLinkActive="active">{{"header.member_management" | translate}}</a></label>
             </li>
             <li *ngIf="accessToken">
                 <label><a routerLink="/product/management"
-                        routerLinkActive="active">PRODUCT MANAGEMENT</a></label>
+                        routerLinkActive="active">{{"header.product_management" | translate}}</a></label>
             </li>
         </span>
 
         <span class="menu menu-right">
             <li *ngIf="!accessToken">
                 <label><a routerLink="/login"
-                        routerLinkActive="active">LOGIN</a></label>
+                        routerLinkActive="active">{{"header.login" | translate}}</a></label>
             </li>
             <li *ngIf="accessToken">
                 <label><a routerLink
-                        (click)="logout()">LOGOUT</a></label>
+                        (click)="logout()">{{"header.logout" | translate}}</a></label>
             </li>
             <li *ngIf="!accessToken">
                 <label><a routerLink="/register"
-                        routerLinkActive="active">REGISTER</a></label>
+                        routerLinkActive="active">{{"header.register" | translate}}</a></label>
             </li>
         </span>
     </ul>

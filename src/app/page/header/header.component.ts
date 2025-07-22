@@ -3,14 +3,15 @@ import { Router, RouterLink, RouterLinkActive } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { MemberService } from '../../common/service/member.service';
 import { AuthService } from '../../common/service/auth.service';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-header',
-  imports: [RouterLink, CommonModule, RouterLinkActive],
+  imports: [RouterLink, CommonModule, RouterLinkActive, TranslatePipe],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })
-export class HeaderComponent implements AfterContentChecked{
+export class HeaderComponent implements AfterContentChecked {
   accessToken: string | null = null;
   memberRole: string | null = '';
   constructor(
@@ -24,7 +25,7 @@ export class HeaderComponent implements AfterContentChecked{
     this.memberRole = this.authService.getMemberRole();
   }
 
-  logout(){
+  logout() {
     this.memberService.logout(this.router);
   }
 }

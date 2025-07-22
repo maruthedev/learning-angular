@@ -4,7 +4,7 @@
     class="product-form"
     (ngSubmit)="onSubmit()">
     <div>
-        <label for="name" appRequiredField>Name</label>
+        <label for="name" appRequiredField>{{"product_form.name" | translate}}</label>
         <input class="form-control" 
             type="text"
             name="name"
@@ -13,7 +13,7 @@
             appFisrtFieldAutoFocus />
     </div>
     <div>
-        <label for="price" appRequiredField>Price</label>
+        <label for="price" appRequiredField>{{"product_form.price" | translate}}</label>
         <input class="form-control"
             type="number"
             name="price"
@@ -23,7 +23,7 @@
             [activeProduct]="product" />
     </div>
     <div>
-        <label for="image_url">Image</label>
+        <label for="image_url">{{"product_form.image" | translate}}</label>
         <input class="form-control"
             type="hidden"
             name="image_url"
@@ -39,11 +39,11 @@
         <div style="display: flex;">
             <label for="imageHolder"
                 for="imageHolder"
-                class="btn btn-primary">Choose Image</label>
+                class="btn btn-primary">{{"button.choose_image" | translate}}</label>
             <button class="btn btn-danger"
                 type="button"
                 *ngIf="uploadFile && previewFileUrl"
-                (click)="clearImage()">Remove image</button>
+                (click)="clearImage()">{{"button.remove_image" | translate}}</button>
         </div>
         <div>
             <img [src]="previewFileUrl"
@@ -55,9 +55,9 @@
         <input id="is_discount_available"
             type="checkbox"
             formControlName="is_discount_available" />
-        <label for="is_discount_available">is discount available</label>
+        <label for="is_discount_available">{{"product_form.is_discount_available" | translate}}</label>
     </div>
     <button class="btn btn-primary"
         *ngIf="product?.is_active && currentOperatorRole !=='CLIENT'"
-        type="submit">Add</button>
+        type="submit">{{"button.add" | translate}}</button>
 </form>

@@ -5,10 +5,11 @@ import { CommonModule } from '@angular/common';
 import { AuthService } from '../../common/service/auth.service';
 import { ProductDetailComponent } from "./product-detail/product-detail.component";
 import { AddProductComponent } from './add-product/add-product.component';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-product-management',
-  imports: [CommonModule, ProductDetailComponent, AddProductComponent],
+  imports: [CommonModule, ProductDetailComponent, AddProductComponent, TranslatePipe],
   templateUrl: './product-management.component.html',
   styleUrl: './product-management.component.css'
 })
@@ -17,6 +18,7 @@ export class ProductManagementComponent implements OnInit {
   memberRole!: string | null;
   editingProduct: Product = Product.getEmptyProduct();
   operation: string = "IDLING";
+  something: string = "";
 
   constructor(
     private productManagementService: ProductManagementService,

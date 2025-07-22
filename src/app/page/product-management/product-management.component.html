@@ -1,13 +1,13 @@
 <button class="btn btn-primary"
     (click)="addNewProduct()"
-    [disabled]="operation === 'ADDING'">+ Add new product</button>
+    [disabled]="operation === 'ADDING'">+ {{"button.add" | translate}} NEW PRODUCT</button>
 <div class="product-management">
     <table class="table">
         <thead>
-            <th>id</th>
-            <th>name</th>
-            <th>price</th>
-            <th>discount available</th>
+            <th>{{"product_form.id" | translate}}</th>
+            <th>{{"product_form.name" | translate}}</th>
+            <th>{{"product_form.price" | translate}}</th>
+            <th>{{"product_form.is_discount_available" | translate}}</th>
         </thead>
         <tbody>
             <tr *ngFor="let product of allProducts"

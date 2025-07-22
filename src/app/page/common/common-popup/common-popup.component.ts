@@ -1,10 +1,11 @@
 import { CommonModule } from '@angular/common';
 import { Component, Inject } from '@angular/core';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-common-popup',
-  imports: [CommonModule],
+  imports: [CommonModule, TranslatePipe],
   templateUrl: './common-popup.component.html',
   styleUrl: './common-popup.component.css'
 })

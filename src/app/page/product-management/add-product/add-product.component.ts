@@ -11,10 +11,11 @@ import { validateImage } from '../directive/image-validate.directive';
 import { CommonPopupComponent } from '../../common/common-popup/common-popup.component';
 import { MatDialog } from '@angular/material/dialog';
 import { RequiredFieldDirective } from '../../../common/directive/required-field.directive';
+import { TranslatePipe } from '@ngx-translate/core';
 
 @Component({
   selector: 'app-add-product',
-  imports: [ReactiveFormsModule, CommonModule, CurrencyTransformDirective, FisrtFieldAutoFocusDirective, RequiredFieldDirective],
+  imports: [ReactiveFormsModule, CommonModule, CurrencyTransformDirective, FisrtFieldAutoFocusDirective, RequiredFieldDirective, TranslatePipe],
   templateUrl: './add-product.component.html',
   styleUrl: './add-product.component.css'
 })
