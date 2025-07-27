@@ -2,49 +2,44 @@
     [formGroup]="memberForm"
     class="member-form">
     <div>
-        <input id="id"
-            formControlName="id"
+        <input formControlName="id"
             class="form-control"
             type="hidden" />
     </div>
     <div>
-        <label for="name" appRequiredField>{{"member_form.name" | translate}}</label>
-        <input id="name"
+        <label appRequiredField>{{"member_form.name" | translate}}</label>
+        <input name="name"
             formControlName="name"
             class="form-control"
             type="text"
-            appFisrtFieldAutoFocus
-            [object]="inputMember()?.id" />
+            autofocus />
     </div>
     <div>
-        <label for="gender">{{"member_form.gender" | translate}}</label>
-        <input id="genderMale"
-            type="radio"
+        <label>{{"member_form.gender" | translate}}</label>
+        <input type="radio"
             formControlName="gender"
             value="Male" /><label for="genderMale">{{"member_form.detail_gender.male" | translate}}</label>
-        <input id="genderFemale"
-            type="radio"
+        <input type="radio"
             formControlName="gender"
             value="Female" /><label for="genderFemale">{{"member_form.detail_gender.female" | translate}}</label>
     </div>
     <div>
-        <label for="age" appRequiredField>{{"member_form.age" | translate}}</label>
-        <input id="age"
+        <label appRequiredField>{{"member_form.age" | translate}}</label>
+        <input name="age"
             formControlName="age"
             class="form-control"
             type="number" />
     </div>
     <div>
-        <label for="tel">{{"member_form.tel" | translate}}</label>
-        <input id="tel"
+        <label>{{"member_form.tel" | translate}}</label>
+        <input name="tel"
             formControlName="tel"
             class="form-control"
             type="tel" />
     </div>
     <div>
-        <label for="role">{{"member_form.role" | translate}}</label>
+        <label>{{"member_form.role" | translate}}</label>
         <select name="role"
-            id="role"
             class="form-control"
             formControlName="role">
             <option value="ADMIN">{{"member_form.detail_role.admin" | translate}}</option>
@@ -53,13 +48,12 @@
         </select>
     </div>
     <div>
-        <label for="avatar_image_url">{{"member_form.avatar" | translate}}</label>
+        <label>{{"member_form.avatar" | translate}}</label>
         <input class="form-control"
             type="text"
             name="avatar_image_url"
-            id="avatar_image_url"
-            formControlName="avatar_image_url" 
-            (change)="onFileSelected($event)"/>
+            formControlName="avatar_image_url"
+            (change)="onFileSelected($event)" />
         <div>
             <img [src]="previewFileUrl"
                 width="300px"
@@ -93,5 +87,5 @@
 </form>
 <div *ngIf="!memberForm || !inputMember"
     class="choose-one-title">
-    <h1>Chon mot member</h1>
+    <h1>{{"global.message.choose_one" | translate: {"item": 'member'} }}</h1>
 </div>

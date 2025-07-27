@@ -7,20 +7,20 @@ import { CommonModule } from '@angular/common';
 import { MemberManagementService } from '../member-management.service';
 import { AuthService } from '../../../common/service/auth.service';
 import { emailValidator } from '../../../common/directive/email-validate.directive';
-import { FisrtFieldAutoFocusDirective } from '../../../common/directive/fisrt-field-auto-focus.directive';
 import { RequiredFieldDirective } from '../../../common/directive/required-field.directive';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonPopupComponent } from '../../common/common-popup/common-popup.component';
 import { TranslatePipe } from '@ngx-translate/core';
+import { BaseFormComponent } from '../../common/base-form/base-form.component';
 
 
 @Component({
   selector: 'app-member-detail',
-  imports: [CommonModule, ReactiveFormsModule, FisrtFieldAutoFocusDirective, RequiredFieldDirective, TranslatePipe],
+  imports: [CommonModule, ReactiveFormsModule, RequiredFieldDirective, TranslatePipe],
   templateUrl: './member-detail.component.html',
   styleUrl: './member-detail.component.css'
 })
-export class MemberDetailComponent implements OnChanges {
+export class MemberDetailComponent extends BaseFormComponent implements OnChanges {
   currentOperatorRole!: string | null;
   member!: Member | undefined;
   memberForm!: FormGroup | undefined;
@@ -28,7 +28,7 @@ export class MemberDetailComponent implements OnChanges {
   changeOutput: OutputEmitterRef<void> = output();
   minAge: number = 1;
   maxAge: number = 999;
-  telRegex: RegExp = new RegExp('^0[1-9]{3}[0-9]{6}$');
+  telRegex: RegExp = new RegExp('^(0)(3[2-9]|5[6|8|9]|7[0|6-9]|8[1-5]|9[0-9])[0-9]{7}$');
   emailRegex: RegExp = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
   previewFileUrl: string | undefined;
 
@@ -38,6 +38,7 @@ export class MemberDetailComponent implements OnChanges {
     private authService: AuthService,
     private matDialog: MatDialog
   ) {
+    super();
     this.currentOperatorRole = authService.getMemberRole();
   }
 
@@ -45,6 +46,7 @@ export class MemberDetailComponent implements OnChanges {
     this.getMemberDetail();
     this.getFormGroup();
     this.updatePreviewImage();
+    this.focusOnFirstField(this.memberForm);
   }
 
   getMemberDetail() {
@@ -132,10 +134,13 @@ export class MemberDetailComponent implements OnChanges {
         height: '300px',
         disableClose: true,
         data: {
-          title: 'INVALID',
-          message: this.getAllInvalidMessages(),
+          title: this.translate.instant("popup.title.invalid"),
+          message: this.getAllInvalidMessages(this.memberForm),
           type: 'INFORMATION'
         }
+      });
+      dialog.afterClosed().subscribe(() => {
+        this.focusOnFirstInvalidField(this.memberForm);
       });
       return;
     }
@@ -156,8 +161,8 @@ export class MemberDetailComponent implements OnChanges {
       height: '300px',
       disableClose: true,
       data: {
-        title: 'DELETE',
-        message: `delete ${this.member.email}?`,
+        title: this.translate.instant("popup.title.confirmation.delete"),
+        message: [this.translate.instant("popup.message.delete.member", { "member_name": this.member.name })],
         type: 'CONFIRMATION'
       }
     });
@@ -170,7 +175,16 @@ export class MemberDetailComponent implements OnChanges {
           await this.memberManagementService.deleteMember(this.member);
           this.changeOutput.emit();
         } catch (exception) {
-          alert("Delete failed");
+          const dialog1 = this.matDialog.open(CommonPopupComponent, {
+            width: '300px',
+            height: '300px',
+            disableClose: true,
+            data: {
+              title: this.translate.instant("popup.title.fail"),
+              message: [this.translate.instant("popup.message.fail")],
+              type: 'INFORMATION'
+            }
+          });
           console.error(exception);
         }
       }
@@ -195,19 +209,5 @@ export class MemberDetailComponent implements OnChanges {
 
   updatePreviewImage(): void {
     this.previewFileUrl = this.member?.avatar_image_url ?? "";
-  }
-
-  getAllInvalidMessages(): string {
-    let result = "";
-    if((!this.memberForm?.get('name')?.value || this.memberForm.get('name')?.invalid)){
-      result += "Name is invalid. ";
-    }
-    if((this.memberForm?.get('age')?.hasError('outRangeAge') || this.memberForm?.get('age')?.invalid)){
-      result += `Input age between ${this.minAge}-${this.maxAge}. `;
-    }
-    if((this.memberForm?.get('tel')?.hasError('invalidTel') || this.memberForm?.get('tel')?.invalid)){
-      result += "Tel is invalid. ";
-    }
-    return result;
   }
 }

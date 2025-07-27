@@ -8,23 +8,23 @@ import { retypePasswordValidator } from '../../common/directive/retype-password-
 import { Router } from '@angular/router';
 import { MemberService } from '../../common/service/member.service';
 import { emailValidator } from '../../common/directive/email-validate.directive';
-import { FisrtFieldAutoFocusDirective } from '../../common/directive/fisrt-field-auto-focus.directive';
 import { RequiredFieldDirective } from '../../common/directive/required-field.directive';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonPopupComponent } from '../common/common-popup/common-popup.component';
 import { TranslatePipe } from '@ngx-translate/core';
+import { BaseFormComponent } from '../common/base-form/base-form.component';
 
 @Component({
   selector: 'app-register-form',
-  imports: [ReactiveFormsModule, CommonModule, FisrtFieldAutoFocusDirective, RequiredFieldDirective, TranslatePipe],
+  imports: [ReactiveFormsModule, CommonModule, RequiredFieldDirective, TranslatePipe],
   templateUrl: './register-form.component.html',
   styleUrl: './register-form.component.css'
 })
-export class RegisterFormComponent implements OnInit {
+export class RegisterFormComponent extends BaseFormComponent implements OnInit {
   loggedMember: Member | undefined = undefined;
   minAge: number = 1;
   maxAge: number = 999;
-  telRegex: RegExp = new RegExp('^0[1-9]{3}[0-9]{6}$');
+  telRegex: RegExp = new RegExp('^(0)(3[2-9]|5[6|8|9]|7[0|6-9]|8[1-5]|9[0-9])[0-9]{7}$');
   emailRegex: RegExp = new RegExp('^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
   registMember: Member = new Member(
     "", "", "", 0, "", "", 1, "", "", null
@@ -36,7 +36,9 @@ export class RegisterFormComponent implements OnInit {
     private router: Router,
     private formBuilder: FormBuilder,
     private matDialog: MatDialog
-  ) { }
+  ) {
+    super();
+  }
 
   ngOnInit(): void {
     this.memberForm = this.formBuilder.group({
@@ -83,7 +85,8 @@ export class RegisterFormComponent implements OnInit {
     },
       {
         validators: retypePasswordValidator()
-      })
+      });
+    this.focusOnFirstField(this.memberForm);
   }
 
   async onSubmit(): Promise<void> {
@@ -94,30 +97,30 @@ export class RegisterFormComponent implements OnInit {
         disableClose: true,
         data: {
           title: 'INVALID',
-          message: this.getAllInvalidMessages(),
+          message: this.getAllInvalidMessages(this.memberForm),
           type: 'INFORMATION'
         }
+      });
+      dialog.afterClosed().subscribe(() => {
+        this.focusOnFirstInvalidField(this.memberForm);
       });
       return;
     }
     this.loggedMember = await this.memberService.register(this.memberForm.value);
     if (this.loggedMember) {
-      confirm("REGISTER SUCCESS");
-      this.router.navigate(["/login"]);
+      const dialog = this.matDialog.open(CommonPopupComponent, {
+        width: '300px',
+        height: '300px',
+        disableClose: true,
+        data: {
+          title: this.translate.instant("popup.title.success"),
+          message: [this.translate.instant("popup.message.success")],
+          type: 'INFORMATION'
+        }
+      });
+      dialog.afterClosed().subscribe(() => {
+        this.router.navigate(["/login"]);
+      });
     }
-  }
-
-  getAllInvalidMessages(): string {
-    let result = "";
-    if ((!this.memberForm?.get('name')?.value || this.memberForm.get('name')?.invalid)) {
-      result += "Name is invalid. ";
-    }
-    if ((this.memberForm?.get('age')?.hasError('outRangeAge') || this.memberForm?.get('age')?.invalid)) {
-      result += `Input age between ${this.minAge}-${this.maxAge}. `;
-    }
-    if ((this.memberForm?.get('tel')?.hasError('invalidTel') || this.memberForm?.get('tel')?.invalid)) {
-      result += "Tel is invalid. ";
-    }
-    return result;
   }
 }

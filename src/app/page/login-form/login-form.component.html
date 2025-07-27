@@ -2,10 +2,9 @@
 <form #userForm="ngForm"
     (ngSubmit)="onSubmit(userForm)">
     <div>
-        <label for="email" appRequiredField>{{"member_form.email" | translate}}</label>
+        <label appRequiredField>{{"member_form.email" | translate}}</label>
         <input class="form-control"
             type="email"
-            id="email"
             name="email"
             placeholder="email@domain.com"
             [(ngModel)]="loginUser.email"
@@ -13,13 +12,12 @@
             maxlength="20"
             appEmailValidate
             required 
-            appFisrtFieldAutoFocus/>
+            autofocus/>
     </div>
     <div>
-        <label for="password" appRequiredField>{{"member_form.password" | translate}}</label>
+        <label appRequiredField>{{"member_form.password" | translate}}</label>
         <input class="form-control"
             type="password"
-            id="password"
             name="password"
             placeholder="password"
             [(ngModel)]="loginUser.password"

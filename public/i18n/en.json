@@ -1,4 +1,13 @@
 {
+    "global": {
+        "message": {
+            "choose_one": "Choose one {{item}}"
+        },
+        "title": {
+            "add": "Add {{item}}",
+            "edit": "Edit {{item}}"
+        }
+    },
     "header": {
         "home_page": "HOME PAGE",
         "member_management": "MEMBER MANAGEMENT",
@@ -51,5 +60,29 @@
         "price": "Price",
         "image": "Image",
         "is_discount_available": "Is discount available"
+    },
+    "warn_message": {
+        "field": {
+            "invalid": "{{field}} is invalid.",
+            "required": "{{field}} is required."
+        }
+    },
+    "popup": {
+        "title": {
+            "success": "SUCCESS",
+            "fail": "FAIL",
+            "invalid": "INVALID",
+            "confirmation": {
+                "delete": "DELETE"
+            }
+        },
+        "message": {
+            "fail": "FAIL",
+            "success": "SUCCESS",
+            "delete": {
+                "product": "Delete product {{product_name}}?",
+                "member": "Delete member {{member_name}}?"
+            }
+        }
     }
 }

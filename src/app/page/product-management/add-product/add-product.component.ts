@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, OnInit, output, OutputEmitterRef, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnInit, output, OutputEmitterRef, ViewChild } from '@angular/core';
 import { Product } from '../../../common/model/product.model';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { CommonModule } from '@angular/common';
@@ -6,20 +6,20 @@ import { CurrencyTransformDirective } from '../directive/currency-transform.dire
 import { AuthService } from '../../../common/service/auth.service';
 import { UploadFileService } from '../../../common/service/upload-file.service';
 import { ProductManagementService } from '../product-management.service';
-import { FisrtFieldAutoFocusDirective } from '../../../common/directive/fisrt-field-auto-focus.directive';
 import { validateImage } from '../directive/image-validate.directive';
 import { CommonPopupComponent } from '../../common/common-popup/common-popup.component';
 import { MatDialog } from '@angular/material/dialog';
 import { RequiredFieldDirective } from '../../../common/directive/required-field.directive';
 import { TranslatePipe } from '@ngx-translate/core';
+import { BaseFormComponent } from '../../common/base-form/base-form.component';
 
 @Component({
   selector: 'app-add-product',
-  imports: [ReactiveFormsModule, CommonModule, CurrencyTransformDirective, FisrtFieldAutoFocusDirective, RequiredFieldDirective, TranslatePipe],
+  imports: [ReactiveFormsModule, CommonModule, CurrencyTransformDirective, RequiredFieldDirective, TranslatePipe],
   templateUrl: './add-product.component.html',
   styleUrl: './add-product.component.css'
 })
-export class AddProductComponent implements OnInit {
+export class AddProductComponent extends BaseFormComponent implements OnInit, AfterViewInit {
   currentOperatorRole: string | null;
   product: Product = Product.getEmptyProduct();
   productForm: FormGroup | undefined;
@@ -36,12 +36,16 @@ export class AddProductComponent implements OnInit {
   constructor(
     private formBuilder: FormBuilder,
     private authService: AuthService,
-    private elementRef: ElementRef,
     private uploadFileService: UploadFileService,
     private productManagementService: ProductManagementService,
     private matDialog: MatDialog
   ) {
+    super();
     this.currentOperatorRole = authService.getMemberRole();
+  }
+
+  ngAfterViewInit(): void {
+    this.focusOnFirstField(this.productForm);
   }
 
   ngOnInit(): void {
@@ -94,11 +98,14 @@ export class AddProductComponent implements OnInit {
         height: '300px',
         disableClose: true,
         data: {
-          title: 'INVALID',
-          message: this.getAllInvalidMessages(),
+          title: this.translate.instant("popup.title.invalid"),
+          message: this.getAllInvalidMessages(this.productForm),
           type: 'INFORMATION'
         }
-      })
+      });
+      dialog.afterClosed().subscribe(() => {
+        this.focusOnFirstInvalidField(this.productForm);
+      });
       return;
     }
     let uploadImgUrl = await this.doUploadImage();
@@ -135,25 +142,11 @@ export class AddProductComponent implements OnInit {
     let target = event.target as HTMLInputElement;
     if (target.files?.length) {
       this.uploadFile = target.files[0];
-      reader.onload = async () => {
+      this.productForm?.get("imageHolder")?.setValue(target.files[0]);
+      reader.onload = () => {
         this.previewFileUrl = reader.result as string;
-        this.productForm?.get("image")?.setValue(reader.result as string);
       };
       reader.readAsDataURL(this.uploadFile);
     }
-  }
-
-  getAllInvalidMessages(): string {
-    let result = "";
-    if ((!this.productForm?.get('name')?.value || this.productForm?.get('name')?.invalid)) {
-      result += "Name is invalid. ";
-    }
-    if ((!this.productForm?.get('price')?.value || this.productForm?.get('price')?.invalid)) {
-      result += "Price is invalid. ";
-    }
-    if (this.productForm?.get('imageHolder')?.hasError('notValidImage')) {
-      result += "Image is invalid. Must be png, jpg, gif and size is equal or less than 1MB";
-    }
-    return result;
   }
 }

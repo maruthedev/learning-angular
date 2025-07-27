@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Member } from '../../common/model/member.model';
 import { MemberManagementService } from './member-management.service';
@@ -19,15 +19,14 @@ export class MemberManagementComponent implements OnInit{
 
   constructor(
     private authService: AuthService,
-    private memberManagementService: MemberManagementService,
-    private elementRef: ElementRef
+    private memberManagementService: MemberManagementService
   ){
     
   }
 
   async ngOnInit(): Promise<void>{
     this.loggedMemberRole = this.authService.getMemberRole();
-    this.loadData();
+    await this.loadData();
   }
 
   async loadData(): Promise<void>{
@@ -35,7 +34,7 @@ export class MemberManagementComponent implements OnInit{
     this.editingMember = undefined;
   }
 
-  async rowSelect(member: Member): Promise<void>{
+  rowSelect(member: Member): void{
     this.editingMember = member;
   }
 }

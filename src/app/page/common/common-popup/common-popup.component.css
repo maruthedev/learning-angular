@@ -1,0 +1,36 @@
+.popup {
+  width: 300px;
+  height: 300px;
+  background-color: #fff;
+  border-radius: 10px;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+  padding: 20px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  font-family: Arial, sans-serif;
+}
+
+.popup .title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+  text-align: center;
+}
+
+.popup .message {
+  flex: 1;
+  margin-top: 16px;
+  font-size: 14px;
+  color: #555;
+  text-align: center;
+  overflow-y: auto;
+}
+
+.popup .button-group {
+  display: flex;
+  justify-content: center;
+  gap: 12px;
+  margin-top: 20px;
+}

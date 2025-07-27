@@ -1,4 +1,4 @@
-<h1 class="title">EDIT</h1>
+<h1 class="title">{{"global.title.edit" | translate: {"item": "PRODUCT"} }}</h1>
 <form *ngIf="productForm && inputProduct().id != ''"
     [formGroup]="productForm"
     class="product-form">
@@ -6,43 +6,36 @@
         <input class="form-control"
             type="hidden"
             name="id"
-            id="id"
             formControlName="id"
-            [(ngModel)]="product.id" />
+            [(ngModel)]="inputProduct().id" />
     </div>
     <div>
-        <label for="name"
-            appRequiredField>{{"product_form.name" | translate}}</label>
+        <label appRequiredField>{{"product_form.name" | translate}}</label>
         <input class="form-control"
             type="text"
             name="name"
-            id="name"
             formControlName="name"
-            appFisrtFieldAutoFocus
-            [object]="inputProduct().id"
-            [(ngModel)]="product.name" />
+            autofocus
+            [(ngModel)]="inputProduct().name" />
     </div>
     <div>
-        <label for="price"
-            appRequiredField>{{"product_form.price" | translate}}</label>
+        <label appRequiredField>{{"product_form.price" | translate}}</label>
         <input class="form-control"
             #priceElement
             type="number"
             name="price"
-            id="price"
             formControlName="price"
             appCurrencyTransform
-            [activeProduct]="product" 
-            [(ngModel)]="product.price"/>
+            [activeProduct]="inputProduct()"
+            [(ngModel)]="inputProduct().price" />
     </div>
     <div>
-        <label for="image_url">{{"product_form.image" | translate}}</label>
+        <label>{{"product_form.image" | translate}}</label>
         <input class="form-control"
             type="hidden"
             name="image_url"
-            id="image_url"
-            formControlName="image_url" 
-            [(ngModel)]="product.image_url"/>
+            formControlName="image_url"
+            [(ngModel)]="inputProduct().image_url" />
         <input class="form-control"
             type="file"
             #fileInput
@@ -65,8 +58,7 @@
         </div>
     </div>
     <div>
-        <input id="is_discount_available"
-            type="checkbox"
+        <input type="checkbox"
             formControlName="is_discount_available" />
         <label for="is_discount_available">{{"product_form.is_discount_available" | translate}}</label>
     </div>

@@ -1,6 +1,6 @@
 <button class="btn btn-primary"
     (click)="addNewProduct()"
-    [disabled]="operation === 'ADDING'">+ {{"button.add" | translate}} NEW PRODUCT</button>
+    [disabled]="operation === 'ADDING'">+ {{"button.add" | translate}}</button>
 <div class="product-management">
     <table class="table">
         <thead>
@@ -38,6 +38,6 @@
 
     <div *ngIf="operation === 'IDLING'"
         class="choose-one-title">
-        <h1>Chon mot product</h1>
+        <h1>{{"global.message.choose_one" | translate: {"item": 'product'} }}</h1>
     </div>
 </div>

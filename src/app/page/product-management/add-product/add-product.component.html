@@ -1,38 +1,34 @@
-<h1 class="title">ADD</h1>
+<h1 class="title">{{"global.title.add" | translate: {"item": "PRODUCT"} }}</h1>
 <form *ngIf="productForm"
     [formGroup]="productForm"
     class="product-form"
     (ngSubmit)="onSubmit()">
     <div>
-        <label for="name" appRequiredField>{{"product_form.name" | translate}}</label>
+        <label appRequiredField>{{"product_form.name" | translate}}</label>
         <input class="form-control" 
             type="text"
             name="name"
-            id="name"
             formControlName="name"
-            appFisrtFieldAutoFocus />
+            autofocus/>
     </div>
     <div>
-        <label for="price" appRequiredField>{{"product_form.price" | translate}}</label>
+        <label appRequiredField>{{"product_form.price" | translate}}</label>
         <input class="form-control"
             type="number"
             name="price"
-            id="price"
             formControlName="price"
             appCurrencyTransform
             [activeProduct]="product" />
     </div>
     <div>
-        <label for="image_url">{{"product_form.image" | translate}}</label>
+        <label>{{"product_form.image" | translate}}</label>
         <input class="form-control"
             type="hidden"
             name="image_url"
-            id="image_url"
             formControlName="image_url" />
         <input class="form-control"
             type="file"
             id="imageHolder"
-            formControlName="imageHolder"
             (change)="onFileSelected($event)"
             style="display: none" 
             #fileInput/>
@@ -52,8 +48,7 @@
         </div>
     </div>
     <div>
-        <input id="is_discount_available"
-            type="checkbox"
+        <input type="checkbox"
             formControlName="is_discount_available" />
         <label for="is_discount_available">{{"product_form.is_discount_available" | translate}}</label>
     </div>

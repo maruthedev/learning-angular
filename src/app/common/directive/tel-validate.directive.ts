@@ -10,6 +10,7 @@ export class TelValidateDirective {
 
 export function telValidator(regex: RegExp): ValidatorFn{
   return (control: AbstractControl): ValidationErrors | null => {
+    if (!control.value) return null;
     let pass = regex.test(control.value);
     return pass ? null : {invalidTel: true};
   } 

@@ -1,4 +1,13 @@
-<h1> {{ data.title }}</h1>
-<p> {{ data.message }} </p>
-<button class="btn btn-primary" (click)="confirm()">{{"button.confirm" | translate}}</button>
-<button *ngIf="data.type == 'CONFIRMATION'" class="btn btn-danger" (click)="cancel()">{{"button.cancel" | translate}}</button>
+<div class="popup">
+    <h1 class="title"> {{ data.title }}</h1>
+    <div *ngFor="let msg of data.message">
+        <p class="message"> {{ msg }} </p>
+    </div>
+    <div class="button-group">
+        <button class="btn btn-primary"
+            (click)="confirm()">{{"button.confirm" | translate}}</button>
+        <button *ngIf="data.type == 'CONFIRMATION'"
+            class="btn btn-danger"
+            (click)="cancel()">{{"button.cancel" | translate}}</button>
+    </div>
+</div>
