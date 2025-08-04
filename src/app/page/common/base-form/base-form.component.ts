@@ -13,6 +13,7 @@ export class BaseFormComponent {
   protected errorMessages: Array<string> = [];
 
   getAllInvalidMessages(): Array<string> {
+    this.errorMessages.length = 0;
     return this.errorMessages;
   }
 

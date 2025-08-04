@@ -77,7 +77,7 @@ export class RegisterFormComponent extends BaseFormComponent implements OnInit {
         ]
       ],
       retypePassword: [
-        '',
+        null,
         [
           Validators.required
         ]
@@ -90,6 +90,7 @@ export class RegisterFormComponent extends BaseFormComponent implements OnInit {
   }
 
   async onSubmit(): Promise<void> {
+    retypePasswordValidator();
     if (this.memberForm.invalid) {
       const dialog = this.matDialog.open(CommonPopupComponent, {
         width: '300px',
@@ -97,7 +98,7 @@ export class RegisterFormComponent extends BaseFormComponent implements OnInit {
         disableClose: true,
         data: {
           title: 'INVALID',
-          message: this.getAllInvalidMessages(this.memberForm),
+          message: this.getAllInvalidMessages(),
           type: 'INFORMATION'
         }
       });
@@ -123,5 +124,31 @@ export class RegisterFormComponent extends BaseFormComponent implements OnInit {
         this.router.navigate(["/login"]);
       });
     }
+  }
+
+  override getAllInvalidMessages(): Array<string> {
+    if (!this.memberForm) {
+      this.errorMessages.length = 0;
+      return this.errorMessages;
+    }
+    super.getAllInvalidMessages();
+    const controls = this.memberForm.controls;
+    for (const fieldName of Object.keys(controls)) {
+      const control = controls[fieldName];
+      if (control.errors?.['required']) {
+        this.errorMessages.push(this.translate.instant("warn_message.field.required", { "field": fieldName }));
+      } else if (control.invalid && (control.value || control.value == 0)) {
+        if(control.errors?.['maxlength']){
+          this.errorMessages.push(this.translate.instant("warn_message.field.max_length", { "field": fieldName, "max_length": control.errors?.['maxlength'].requiredLength }));
+        } else if (control.errors?.['outRangeAge']) {
+          this.errorMessages.push(this.translate.instant("warn_message.field.number_out_of_range", { "field": fieldName, "min": this.minAge, "max": this.maxAge }));
+        } else if (control.errors?.['passwordMismatch']) {
+          this.errorMessages.push(this.translate.instant("warn_message.field.mismatch", { "field_1": this.translate.instant("member_form.password"), "field_2": this.translate.instant("member_form.retype_password") }));
+        } else {
+          this.errorMessages.push(this.translate.instant("warn_message.field.invalid", { "field": fieldName }));
+        }
+      }
+    }
+    return this.errorMessages;
   }
 }

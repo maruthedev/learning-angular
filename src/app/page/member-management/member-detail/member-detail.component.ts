@@ -135,7 +135,7 @@ export class MemberDetailComponent extends BaseFormComponent implements OnChange
         disableClose: true,
         data: {
           title: this.translate.instant("popup.title.invalid"),
-          message: this.getAllInvalidMessages(this.memberForm),
+          message: this.getAllInvalidMessages(),
           type: 'INFORMATION'
         }
       });
@@ -210,5 +210,30 @@ export class MemberDetailComponent extends BaseFormComponent implements OnChange
 
   updatePreviewImage(): void {
     this.previewFileUrl = this.member?.avatar_image_url ?? "";
+  }
+
+  override getAllInvalidMessages(): Array<string> {
+    debugger;
+    if (!this.memberForm) {
+      this.errorMessages.length = 0;
+      return this.errorMessages;
+    }
+    super.getAllInvalidMessages();
+    const controls = this.memberForm.controls;
+    for (const fieldName of Object.keys(controls)) {
+      const control = controls[fieldName];
+      if (control.errors?.['required']) {
+        this.errorMessages.push(this.translate.instant("warn_message.field.required", { "field": fieldName }));
+      } else if (control.invalid && (control.value || control.value == 0)) {
+        if(control.errors?.['maxlength']){
+          this.errorMessages.push(this.translate.instant("warn_message.field.max_length", { "field": fieldName, "max_length": control.errors?.['maxlength'].requiredLength }));
+        } else if (control.errors?.['outRangeAge']) {
+          this.errorMessages.push(this.translate.instant("warn_message.field.number_out_of_range", { "field": fieldName, "min": this.minAge, "max": this.maxAge }));
+        } else {
+          this.errorMessages.push(this.translate.instant("warn_message.field.invalid", { "field": fieldName }));
+        }
+      }
+    }
+    return this.errorMessages;
   }
 }

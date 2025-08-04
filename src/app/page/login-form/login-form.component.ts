@@ -10,7 +10,7 @@ import { EmailValidateDirective } from '../../common/directive/email-validate.di
 import { RequiredFieldDirective } from '../../common/directive/required-field.directive';
 import { MatDialog } from '@angular/material/dialog';
 import { CommonPopupComponent } from '../common/common-popup/common-popup.component';
-import { TranslatePipe, TranslateService } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { BaseFormComponent } from '../common/base-form/base-form.component';
 
 @Component({
@@ -69,15 +69,20 @@ export class LoginFormComponent extends BaseFormComponent implements AfterViewIn
       this.errorMessages.length = 0;
       return this.errorMessages;
     }
-    // const controls = this.userForm.form.controls;
-    // for (const fieldName of Object.keys(controls)) {
-    //   const control = controls[fieldName];
-    //   if (control.errors?.['required']) {
-    //     result.push(this.translate.instant("warn_message.field.required", { "field": fieldName }));
-    //   } else if (control.invalid && (control.value || control.value == 0)) {
-    //     result.push(this.translate.instant("warn_message.field.invalid", { "field": fieldName }));
-    //   }
-    // }
+    super.getAllInvalidMessages();
+    const controls = this.userForm.form.controls;
+    for (const fieldName of Object.keys(controls)) {
+      const control = controls[fieldName];
+      if (control.errors?.['required']) {
+        this.errorMessages.push(this.translate.instant("warn_message.field.required", { "field": fieldName }));
+      } else if (control.invalid && control.value) {
+        if(control.errors?.['maxlength']){
+          this.errorMessages.push(this.translate.instant("warn_message.field.max_length", { "field": fieldName, "max_length": control.errors?.['maxlength'].requiredLength }));
+        } else {
+          this.errorMessages.push(this.translate.instant("warn_message.field.invalid", { "field": fieldName }));
+        }
+      }
+    }
     return this.errorMessages;
   }
 }

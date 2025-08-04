@@ -99,7 +99,7 @@ export class AddProductComponent extends BaseFormComponent implements OnInit, Af
         disableClose: true,
         data: {
           title: this.translate.instant("popup.title.invalid"),
-          message: this.getAllInvalidMessages(this.productForm),
+          message: this.getAllInvalidMessages(),
           type: 'INFORMATION'
         }
       });
@@ -149,5 +149,29 @@ export class AddProductComponent extends BaseFormComponent implements OnInit, Af
       };
       reader.readAsDataURL(this.uploadFile);
     }
+  }
+
+  override getAllInvalidMessages(): Array<string> {
+    if (!this.productForm) {
+      this.errorMessages.length = 0;
+      return this.errorMessages;
+    }
+    super.getAllInvalidMessages();
+    const controls = this.productForm.controls;
+    for (const fieldName of Object.keys(controls)) {
+      const control = controls[fieldName];
+      if (control.errors?.['required']) {
+        this.errorMessages.push(this.translate.instant("warn_message.field.required", { "field": fieldName }));
+      } else if (control.invalid && (control.value || control.value == 0)) {
+        if(control.errors?.['maxlength']){
+          this.errorMessages.push(this.translate.instant("warn_message.field.max_length", { "field": fieldName, "max_length": control.errors?.['maxlength'].requiredLength }));
+        } else if (control.errors?.['min'] || control.errors?.['max']) {
+          this.errorMessages.push(this.translate.instant("warn_message.field.number_out_of_range", { "field": fieldName, "min": this.minPrice, "max": this.maxPrice }));
+        } else if (control.errors?.['notValidImage']) {
+          this.errorMessages.push(this.translate.instant("warn_message.field.invalid_file", { "file": this.translate.instant("product_form.image"), "file_types": this.allowedTypes.join(","), "file_size": this.maxPrice }));
+        }
+      }
+    }
+    return this.errorMessages;
   }
 }

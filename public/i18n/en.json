@@ -35,6 +35,7 @@
     "member_form": {
         "email": "Email",
         "password": "Password",
+        "retype_password":"Retype Password",
         "name": "Name",
         "gender": "Gender",
         "age": "Age",
@@ -64,7 +65,11 @@
     "warn_message": {
         "field": {
             "invalid": "{{field}} is invalid.",
-            "required": "{{field}} is required."
+            "required": "{{field}} is required.",
+            "number_out_of_range": "{{field}} must be between {{min}} and {{max}}.",
+            "mismatch": "{{field_1}} and {{field_2}} is mismatch.",
+            "invalid_file": "{{file}} is invalid. must be {{file_types}} and size is less than {{file_size}}kb.",
+            "max_length": "{{field}}'s max length is {{max_length}}"
         }
     },
     "popup": {
