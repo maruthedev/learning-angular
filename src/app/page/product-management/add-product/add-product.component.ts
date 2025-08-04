@@ -104,6 +104,7 @@ export class AddProductComponent extends BaseFormComponent implements OnInit, Af
         }
       });
       dialog.afterClosed().subscribe(() => {
+        this.productForm?.markAllAsTouched();
         this.focusOnFirstInvalidField(this.productForm);
       });
       return;

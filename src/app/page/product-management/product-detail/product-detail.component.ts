@@ -153,6 +153,7 @@ export class ProductDetailComponent extends BaseFormComponent implements OnChang
         }
       });
       dialog.afterClosed().subscribe(() => {
+        this.productForm?.markAllAsTouched();
         this.focusOnFirstInvalidField(this.productForm);
       });
       return;

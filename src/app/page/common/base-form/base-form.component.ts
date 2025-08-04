@@ -10,19 +10,10 @@ import { TranslateService } from '@ngx-translate/core';
 })
 export class BaseFormComponent {
   translate: TranslateService = inject(TranslateService);
+  protected errorMessages: Array<string> = [];
 
-  getAllInvalidMessages(form: NgForm | FormGroup): Array<string> {
-    const result: Array<string> = [];
-    const controls = form instanceof NgForm ? form.form.controls : (form as FormGroup).controls;
-    for (const fieldName of Object.keys(controls)) {
-      const control = controls[fieldName];
-      if (control.errors?.['required']) {
-        result.push(this.translate.instant("warn_message.field.required", { "field": fieldName }));
-      } else if (control.invalid && (control.value || control.value == 0)) {
-        result.push(this.translate.instant("warn_message.field.invalid", { "field": fieldName }));
-      }
-    }
-    return result;
+  getAllInvalidMessages(): Array<string> {
+    return this.errorMessages;
   }
 
   focusOnFirstInvalidField(form: NgForm | FormGroup | any): void {

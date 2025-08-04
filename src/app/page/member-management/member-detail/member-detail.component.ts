@@ -140,6 +140,7 @@ export class MemberDetailComponent extends BaseFormComponent implements OnChange
         }
       });
       dialog.afterClosed().subscribe(() => {
+        this.memberForm?.markAllAsTouched();
         this.focusOnFirstInvalidField(this.memberForm);
       });
       return;

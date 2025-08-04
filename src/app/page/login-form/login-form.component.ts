@@ -19,7 +19,7 @@ import { BaseFormComponent } from '../common/base-form/base-form.component';
   templateUrl: './login-form.component.html',
   styleUrl: './login-form.component.css'
 })
-export class LoginFormComponent extends BaseFormComponent implements AfterViewInit{
+export class LoginFormComponent extends BaseFormComponent implements AfterViewInit {
   loginUser: User = new User("", "");
   loggedMember: Member | undefined = undefined;
   @ViewChild("userForm") userForm!: NgForm;
@@ -37,8 +37,8 @@ export class LoginFormComponent extends BaseFormComponent implements AfterViewIn
     this.focusOnFirstField(this.userForm)
   }
 
-  async onSubmit(userForm: any): Promise<void> {
-    let invalids: Array<string> = this.getAllInvalidMessages(userForm);
+  async onSubmit(userForm: NgForm): Promise<void> {
+    let invalids: Array<string> = this.getAllInvalidMessages();
     if (invalids.length > 0) {
       const dialog = this.matDialog.open(CommonPopupComponent, {
         width: '300px',
@@ -51,6 +51,7 @@ export class LoginFormComponent extends BaseFormComponent implements AfterViewIn
         }
       });
       dialog.afterClosed().subscribe(() => {
+        userForm.form.markAllAsTouched();
         this.focusOnFirstInvalidField(this.userForm);
       })
       return;
@@ -61,5 +62,22 @@ export class LoginFormComponent extends BaseFormComponent implements AfterViewIn
       this.authService.setMemberRole(this.loggedMember.role);
       this.router.navigate(["/home"]);
     }
+  }
+
+  override getAllInvalidMessages(): Array<string> {
+    if(!this.userForm){
+      this.errorMessages.length = 0;
+      return this.errorMessages;
+    }
+    // const controls = this.userForm.form.controls;
+    // for (const fieldName of Object.keys(controls)) {
+    //   const control = controls[fieldName];
+    //   if (control.errors?.['required']) {
+    //     result.push(this.translate.instant("warn_message.field.required", { "field": fieldName }));
+    //   } else if (control.invalid && (control.value || control.value == 0)) {
+    //     result.push(this.translate.instant("warn_message.field.invalid", { "field": fieldName }));
+    //   }
+    // }
+    return this.errorMessages;
   }
 }

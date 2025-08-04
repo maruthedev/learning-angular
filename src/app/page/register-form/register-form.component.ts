@@ -102,6 +102,7 @@ export class RegisterFormComponent extends BaseFormComponent implements OnInit {
         }
       });
       dialog.afterClosed().subscribe(() => {
+        this.memberForm.markAllAsTouched();
         this.focusOnFirstInvalidField(this.memberForm);
       });
       return;
